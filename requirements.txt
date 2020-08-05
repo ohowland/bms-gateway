@@ -1,0 +1,12 @@
+aenum==2.2.4
+argparse-addons==0.6.0
+bitstruct==8.11.0
+cantools==35.2.0
+diskcache==4.1.0
+pkg-resources==0.0.0
+pymodbus==2.3.0
+pyserial==3.4
+python-can==4.0.0.dev0
+six==1.15.0
+textparser==0.23.0
+wrapt==1.12.1

@@ -52,8 +52,8 @@ def decode_modbus(resp) -> dict:
 async def write_can_bus(bus):
     logging.debug('Starting periodic CAN bus write')
     msg = can.Message(
-        arbitration_id=0x00, 
-        data=[0, 0, 0, 0], 
+        arbitration_id=0x321, 
+        data=[0xB, 0xE, 0xE, 0xF], 
         is_extended_id=False
     )
     task = bus.send_periodic(msg, 0.2)
@@ -64,6 +64,7 @@ async def write_can_bus(bus):
         # encode values to msg.data
         msg.data = [1, 0, 0, 0]
         task.modify_data(msg)
+
         await asyncio.sleep(0.1)
     task.stop()
     logging.debug('Stopping periodic CAN bus write')
@@ -83,8 +84,8 @@ if __name__ == '__main__':
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
-    client = ModbusClient(schedulers.ASYNC_IO, port=5020, loop=loop)
+    #client = ModbusClient(schedulers.ASYNC_IO, port=5020, loop=loop)
 
     
-    loop.run_until_complete()
+    loop.run_forever()
     loop.close()

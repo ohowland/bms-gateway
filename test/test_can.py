@@ -30,14 +30,19 @@ class TestCANWriter(unittest.TestCase):
         self.assertEqual(writer.baudrate, "500000")
 
     def test_write(self):
-        testbus = can.interface.Bus("vcan0", bustype="virtual", receive_own_messages=True)
+        bus = can.interface.Bus("vcan0", bustype="virtual")
 
         writer = CANWriter(self.bootstrap['SMA_COMM'])
-        test_msg = {'IO_SOC': 1, 'IO_VPACK': 2}
-        #writer.update(test_msg)
+        test_msg = {
+                'IO_SOC': can.Message(
+                    arbitration_id = 0x321,
+                    data = [0xDE, 0xAD, 0xBE, 0xEF],
+                    is_extended_id = False)
+        }
+        writer.update(test_msg)
 
-        #resp = testbus.recv()
-        #self.assertEqual(test_msg, resp)
+        resp = bus.recv()
+        self.assertEqual(test_msg['IO_SOC'].data, resp.data)
 
 
 class TestCANTarget(unittest.TestCase):
@@ -57,11 +62,14 @@ class TestCANTarget(unittest.TestCase):
 
     def test_encode_decode_soc(self):
         sma = SMA(self.bootstrap['SMA_DBC'])
+
         test_msg = {'IO_SOC': 1, 'IO_VPACK': 2}
+
         batt_state_msg = sma.comm.db.get_message_by_name('BATT_STATE')
         data = batt_state_msg.encode(test_msg)
         batt_state_msg.data = data
         decoded = sma.comm.db.decode_message(batt_state_msg.frame_id,  batt_state_msg.data)
+
         self.assertEqual(decoded, test_msg)
 
     def test_get_signals(self):
