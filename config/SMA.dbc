@@ -1,5 +1,6 @@
 VERSION "0.1"
 
-BO_ 500 BATT_STATE: 2 IO
+BO_ 0351 SMA1: 2 IO
  SG_ soc : 0|8@1+ (1,0) [0|0] "%" DBG
  SG_ vpack : 8|8@1+ (1,0) [0|0] "V" DBG
+
