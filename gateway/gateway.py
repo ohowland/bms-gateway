@@ -43,10 +43,10 @@ async def write_bus(writer, target, queue):
         data = await queue.get()
         print('Writing CAN bus @ {}'.format(datetime.now().time()))
         target.update_messages(data)
-        print("sending: {}".format(target))
+        print("Messages: {}\nSignals: {}".format(target.messages, target.signals))
 
         # Update tasks by message
-        writer.update(target.messages)
+        #writer.update(target.messages)
 
 def main(*args, **kwargs):
     """ 

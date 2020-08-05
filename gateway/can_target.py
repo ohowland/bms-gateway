@@ -5,6 +5,7 @@
 
 import logging
 import cantools
+import can
 
 class Inverter(object):
     def __init__(self):
@@ -34,17 +35,18 @@ class SMA(Inverter):
         return self._messages
 
     def update_messages(self, data):
-        for key in data.keys():
-            msg_name = self.signals.get(key, None)
+        for signal_name in data.keys():
+            msg_name = self.signals.get(signal_name, None)
             if msg_name:
-                msg = self.messages.get(msg_name, None)
-                if not msg: 
-                    msg = self.comm.db.get_message_by_name(msg_name)
-                if msg:
-                    msg.data = msg.encode(data)
+                msg_template = self.comm.db.get_message_by_name(msg_name)
+                if msg_template:
+                    data = msg_template.encode(data)
+                    msg = can.Message(arbitration_id=msg_template.frame_id, data=data)
                     self._messages.update({msg_name: msg})
+                else:
+                    raise AttributeError("cannot find message: {} in database".format(msg_name))
             else:
-                logging.debug("unrecognized signal name {}".format(key))
+                raise AttributeError("no message in SMA.messages contains the signal: {}".format(key))
             
 
 class SMAComm(object):

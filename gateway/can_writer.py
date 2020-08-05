@@ -26,11 +26,14 @@ class CANWriter(CAN):
         self._bus = can.interface.Bus(self._channel, bustype=self._interface, bitrate=self._baudrate)
         self._tasks = {}
 
-    def update(self, target):
-        for name, msg in target.messages.items():
+    def update(self, msgs):
+        for name, msg in msgs.items():
             task = self._tasks.get(name, None)
             if task:
+                print("task found: {}".format(name))
                 task.modify_data(msg)
             else:
-                task = self._bus.send_periodic(msg, self._update_rate)
-                self._tasks.update(name, task)
+                print("Creating new task: {}".format(name))
+                
+                task = self._bus.send_periodic(msg, 0.2)
+                self._tasks.update({name: task})
