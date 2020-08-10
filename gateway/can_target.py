@@ -37,6 +37,7 @@ class SMA(Inverter):
         for key in data.keys():
             msg_name = self.signals.get(key, None)
             if msg_name:
+                # msg exists in internal reverse signal to message map
                 msg = self.messages.get(msg_name, None)
                 if not msg: 
                     msg = self.comm.db.get_message_by_name(msg_name)
