@@ -23,14 +23,18 @@ class TestSMADBC(unittest.TestCase):
         pass
     
     def test_dbc_load(self):
+        ''' Test that the manditory control message can be read from 
+            the dbc file.
+        '''
 
-        # check manditory message stats
         io_ctrl = self.db.get_message_by_name('IO_CTRL')
         self.assertEqual(io_ctrl.frame_id, 0x351)
 
     def test_io_ctrl_signals(self):
+        ''' Test the signal integrity of the manditory control message
+        '''
+        
         io_ctrl = self.db.get_message_by_name('IO_CTRL')
-        # check signal ordering
         self.assertEqual(io_ctrl.signals[0].name, 'IO_CTRL_BATT_CHRG_V')
         self.assertEqual(io_ctrl.signals[0].length, 16)
         self.assertFalse(io_ctrl.signals[0].is_signed)
@@ -52,6 +56,9 @@ class TestSMADBC(unittest.TestCase):
         self.assertEqual(io_ctrl.signals[3].start, 48)
 
     def test_io_ctrl_encoding(self):
+        ''' Test message encoding and decoding
+        '''
+
         io_ctrl = self.db.get_message_by_name('IO_CTRL')
         
         test_data = {'IO_CTRL_BATT_CHRG_V': 51,
@@ -66,8 +73,9 @@ class TestSMADBC(unittest.TestCase):
         self.assertEqual(test_data, decoded_test_data)
 
     def test_sma_target(self):
-        sma = SMA(self.boostrap['SMA_DBC'])
+        sma = sma_target.SMA(self.bootstrap['SMA_DBC'])
         
+        print(sma.messages)
         pass
 
 
