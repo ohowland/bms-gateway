@@ -7,10 +7,9 @@ import asyncio
 import os
 import logging
 
-from modbus_poller import ModbusPoller
-from modbus_target import Nuvation
 from can_writer import CANWriter
-from can_target import SMA
+from can_target_inverter import SMA
+from can_target_bms import Nuvation
 
 from datetime import datetime
 from configparser import ConfigParser

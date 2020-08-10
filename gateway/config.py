@@ -6,14 +6,13 @@ import logging
 
 from pathlib import Path
 
-
 def get(filename, **kwargs):
     """ Return path to the filename, file must exist at top level of config folder
     """
 
     base_path = Path.cwd()
     logging.debug('base_path: {}'.format(base_path))
-    while base_path.parent.stem == 'PGPm':
+    while base_path.parent.stem == 'gateway':
         base_path = base_path.parent
 
     if kwargs.get('TESTING'):
