@@ -11,7 +11,7 @@ def get(filename, **kwargs):
     """
 
     base_path = Path.cwd()
-    logging.debug('base_path: {}'.format(base_path))
+    #logging.debug('base_path: {}'.format(base_path))
     while base_path.parent.stem == 'gateway':
         base_path = base_path.parent
 
@@ -20,5 +20,5 @@ def get(filename, **kwargs):
     else:
         path_to_file = base_path.joinpath('config', filename)
 
-    logging.debug('path_to_file: {}'.format(path_to_file))
+    #logging.debug('path_to_file: {}'.format(path_to_file))
     return path_to_file

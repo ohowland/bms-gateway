@@ -22,7 +22,7 @@ class CANWriter(CAN):
         self._interface = config['interface']
         self._channel = config['channel']
         self._baudrate = config['baudrate']
-        self._update_rate = int(config['update_rate'])
+        self._update_rate = float(config['update_rate'])
         self._bus = can.interface.Bus(self._channel, bustype=self._interface, bitrate=self._baudrate)
         self._tasks = {}
 
@@ -37,6 +37,10 @@ class CANWriter(CAN):
             else:
                 task = self._bus.send_periodic(msg, self._update_rate)
                 self._tasks.update({name: task})
+
+    def stop(self):
+        for task in self._tasks.values():
+            task.stop()
 
     @property
     def interface(self):

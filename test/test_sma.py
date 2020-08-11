@@ -5,7 +5,7 @@ from configparser import ConfigParser
 
 import cantools
 
-from gateway import config, sma_target
+from gateway import config, sma
 
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 logger = logging.getLogger('debug')
@@ -17,7 +17,7 @@ class TestSMADBC(unittest.TestCase):
         bootstrap_path = config.get('bootstrap.ini', TESTING=True)
         bootstrap_parser.read(bootstrap_path.as_posix())
         self.bootstrap = bootstrap_parser
-        self.db = cantools.database.load_file(bootstrap_parser['SMA_DBC']['dbc_filepath'])
+        self.db = cantools.database.load_file(bootstrap_parser['INV_COMM']['dbc_filepath'])
 
     def tearDown(self):
         pass
@@ -72,10 +72,29 @@ class TestSMADBC(unittest.TestCase):
         decoded_test_data = io_ctrl.decode(bytes.fromhex('fe01a00f8813e001'))
         self.assertEqual(test_data, decoded_test_data)
 
-    def test_sma_target(self):
-        sma = sma_target.SMA(self.bootstrap['SMA_DBC'])
+    def test_sma(self):
+        inv = sma.SMA(self.bootstrap['INV_COMM']) 
+
+    def test_update_bad_sig(self):
+        inv = sma.SMA(self.bootstrap['INV_COMM'])
+        self.assertRaises(KeyError, inv.update_status, {'jerry': 1})
+
+    def test_update_half_sig(self):
+        inv = sma.SMA(self.bootstrap['INV_COMM'])
         
-        print(sma.messages)
-        pass
+        half_msg_data = {'IO_CTRL_BATT_CHRG_V': 51,
+                'IO_CTRL_BATT_CHRG_I_LIM': 400}
 
+        self.assertRaises(TypeError, inv.update_status, half_msg_data)
 
+    def test_update_good_sig(self):
+        inv = sma.SMA(self.bootstrap['INV_COMM'])
+        
+        test_data = {'IO_CTRL_BATT_CHRG_V': 51,
+                'IO_CTRL_BATT_CHRG_I_LIM': 400,
+                'IO_CTRL_BATT_DISCHRG_I_LIM': 500,
+                'IO_CTRL_BATT_DISCHRG_V': 48}
+       
+        inv.update_status(test_data)
+
+        self.assertIsNot(inv.messages, None)

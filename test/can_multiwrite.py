@@ -84,8 +84,5 @@ if __name__ == '__main__':
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
-    #client = ModbusClient(schedulers.ASYNC_IO, port=5020, loop=loop)
-
-    
     loop.run_forever()
     loop.close()
