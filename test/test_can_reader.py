@@ -95,3 +95,28 @@ class TestCANReader(unittest.TestCase):
 
         reader.stop()
 
+    def test_iterator(self):
+        bus = can.interface.Bus("vcan0", bustype="virtual")
+        reader = CANReader(self.bootstrap['BMS_COMM'])
+        
+        test_msg = can.Message(arbitration_id = 0xABC,
+                                data = [0xDE, 0xAD, 0xBE, 0xEF],
+                                is_extended_id = False) 
+        bus.send(test_msg)
+
+        test_msg = can.Message(arbitration_id = 0xABC,
+                                data = [0xDE, 0xAD, 0xBE, 0xEF],
+                                is_extended_id = False) 
+        bus.send(test_msg)
+        
+        test_msg = can.Message(arbitration_id = 0xABC,
+                                data = [0xDE, 0xAD, 0xBE, 0xEF],
+                                is_extended_id = False) 
+        bus.send(test_msg)
+
+        
+        for msg in reader:
+            self.assertEqual(resp.data, test_msg.data)
+            self.assertEqual(resp.arbitration_id, test_msg.arbitration_id)
+
+        reader.stop()

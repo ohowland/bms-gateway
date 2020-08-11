@@ -35,7 +35,7 @@ class CANReader(object):
         
 
     def get_message(self):
-        return self._listener.get_message(timeout = self._update_rate)
+        return self._listener.get_message(timeout = 0)
 
     def stop(self):
         self._notifer.stop()

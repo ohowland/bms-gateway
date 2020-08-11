@@ -10,14 +10,7 @@ from collections import namedtuple, OrderedDict
 import can
 import cantools
 
-class CAN(object):
-    signal = namedtuple(
-        'signal', 'name, bytes, start_byte')
-
-    def __init__(self):
-        pass
-
-class CANWriter(CAN):       
+class CANWriter(object):       
     def __init__(self, config):
         self._interface = config['interface']
         self._channel = config['channel']
@@ -26,36 +19,18 @@ class CANWriter(CAN):
         self._bus = can.interface.Bus(self._channel, bustype=self._interface, bitrate=self._baudrate)
         self._tasks = {}
 
-    def update(self, messages):
+    def publish(self, name, msg):
         ''' iterate messages, check if a task is to be created or modified 
         '''
-        for name, msg in messages.items():
-            task = self._tasks.get(name, None)
-            if task:
-                print("task found: {}".format(name))
-                task.modify_data(msg)
-            else:
-                task = self._bus.send_periodic(msg, self._update_rate)
-                self._tasks.update({name: task})
+        task = self._tasks.get(name, None)
+        if task:
+            print("task found: {}".format(name))
+            task.modify_data(msg)
+        else:
+            task = self._bus.send_periodic(msg, self._update_rate)
+            self._tasks.update({name: task})
 
     def stop(self):
         for task in self._tasks.values():
             task.stop()
 
-    @property
-    def interface(self):
-        return self._interface
-
-    @property
-    def channel(self):
-        return self._channel
-
-    @property
-    def baudrate(self):
-        return self._baudrate
-    
-    @property
-    def update_rate(self):
-        return self._update_rate
-    
-    
