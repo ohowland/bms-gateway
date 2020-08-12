@@ -6,46 +6,55 @@
 import asyncio
 import os
 import logging
+import time
 
-from can_writer import CANWriter
-from can_target_inverter import SMA
-from can_target_bms import Nuvation
-
-from datetime import datetime
+from target import Target
 from configparser import ConfigParser
-from datetime import datetime
-from collections import namedtuple
 
-async def poll_target(poller, target, queue):
-    """ The poll_target loop continiously polls configured objects
-        and pipes ---.
+async def bms_target(target, queue):
+    """ The bms_target loop continiously the bms canbus and enques information
+        on the linking queue.
     """
 
+    cnt = 0
+    n = 10 
+    t_arr = [0]*n
     while True:
-        print('Polling Target @ {}'.format(datetime.now().time()))
+        t0 = time.time()
 
-        response = poller.read(target.comm.registers)
-        print("response: {}".format(response))
-        target.update_from(response)
+        target.update_status()
+        await queue.put(target.status)
+        await asyncio.sleep(target.update_rate)
 
+        t1 = time.time()
+        t_arr[cnt] = t1-t0
+        cnt = (cnt + 1) % n
+        if cnt == n-1:
+            logging.debug("bms avg loop time: {}".format(sum(t_arr)/n))
+        
 
-        if response:
-            await queue.put(response)
-        # pipe data can writer
-        await asyncio.sleep(poller.update_rate)
-
-async def write_bus(writer, target, queue):
+async def inv_target(target, adapter, queue):
     """ The update loop continiously writes the canbus
     """
 
+    cnt = 0
+    n = 10
+    t_arr = [0]*n
     while True:
-        data = await queue.get()
-        print('Writing CAN bus @ {}'.format(datetime.now().time()))
-        target.update_messages(data)
-        print("Messages: {}\nSignals: {}".format(target.messages, target.signals))
+        t0 = time.time()
 
-        # Update tasks by message
-        #writer.update(target.messages)
+        data = await queue.get()
+        
+        if adapter:
+            pass
+
+        target.write_control(data)
+
+        t1 = time.time()
+        t_arr[cnt] = t1-t0
+        cnt = (cnt + 1) % n
+        if cnt == n-1:
+            logging.debug("inv avg loop time: {}".format(sum(t_arr)/n))
 
 def main(*args, **kwargs):
     """ 
@@ -54,15 +63,15 @@ def main(*args, **kwargs):
     loop = asyncio.get_event_loop()
     bootstrap_config = kwargs['bootstrap']
 
-    poller = ModbusPoller(bootstrap_config['BMS_COMM'])
-    modbus_target = Nuvation()
-    writer = CANWriter(bootstrap_config['INV_COMM'])
-    canbus_target = SMA(bootstrap_config['INV_COMM'])
+    bms = Target(bootstrap_config['BMS_COMM'])
+    inv = Target(bootstrap_config['INV_COMM'])
+
+    adapter = None 
 
     queue = asyncio.Queue(maxsize=1, loop=loop)
 
-    loop.create_task(poll_target(poller, modbus_target, queue))
-    loop.create_task(write_bus(writer, canbus_target, queue))
+    loop.create_task(bms_target(bms, queue))
+    loop.create_task(inv_target(inv, translator, queue))
 
     try:
         loop.run_forever()

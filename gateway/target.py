@@ -1,25 +1,35 @@
-""" Name: sma.py
+""" Name: can_target.py
     Author: Howl & Edgerton, llc 2020
     About: targets for canbus
 """
-from gateway import translator, can_reader, can_writer
-
-import logging
-import cantools
-import can
-import time
+from can_reader import CANReader
+from can_writer import CANWriter
+from translator import Translator
 
 class Target(object):
     def __init__(self, config):
-        self._trans = translator.Translator(config)
+        self._trans = Translator(config)
         self._status = dict()
         self._control = dict()
-        self._reader = can_reader(config)
-        self._writer = can_writer(config)
+        self._reader = CANReader(config)
+        self._writer = CANWriter(config)
+
+    def __repr__(self):
+        return "Status: {}\nControl: {}\n"\
+                .format(self.status, self.control)
+                
+
+    def __del__(self):
+        self.stop()
 
     @property
-    def state(self):
-        return self._state
+    def status(self):
+        return self._status
+
+    @property
+    def control(self):
+        return self._control
+
 
     @property
     def trans(self):
@@ -34,3 +44,14 @@ class Target(object):
         for name, data in self._control.items():
             encoded = self._trans.encode_to_frame(name, data)
             self._writer.publish(name, encoded)
+
+    def stop(self):
+        try:
+            self._reader.stop()
+        except:
+            pass
+
+        try:
+            self._writer.stop()
+        except:
+            pass

@@ -27,7 +27,7 @@ class CANReader(object):
         return self
 
     def __next__(self):
-        msg = self._listener.get_message(timeout = 0)
+        msg = self._listener.get_message(timeout = 0.1)
         if msg:
             return msg
         else:

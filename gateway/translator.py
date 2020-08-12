@@ -10,7 +10,6 @@ class Translator(object):
     
     def __init__(self, config):
         self._db = cantools.database.load_file(config['dbc_filepath'])
-        self._state = init_state(self.db)
 
     @property
     def db(self):
@@ -37,6 +36,7 @@ class Translator(object):
                               data = encoded_data,
                               is_extended_id = template.is_extended_frame,
                               dlc = template.length)
+            return msg
         except:
             raise TypeError("unable to encode frame id: {}".format(template.frame_id))
 
