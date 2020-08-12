@@ -4,7 +4,7 @@ import can
 import time
 
 from gateway import config
-from gateway.can_writer import CANWriter
+from canwriter import CANWriter
 
 from pathlib import Path
 from configparser import ConfigParser

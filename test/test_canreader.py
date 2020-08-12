@@ -4,7 +4,7 @@ import can
 import time
 
 from gateway import config
-from gateway.can_reader import CANReader
+from canreader import CANReader
 
 
 from pathlib import Path
@@ -116,7 +116,7 @@ class TestCANReader(unittest.TestCase):
 
         
         for msg in reader:
-            self.assertEqual(resp.data, test_msg.data)
-            self.assertEqual(resp.arbitration_id, test_msg.arbitration_id)
+            self.assertEqual(msg.data, test_msg.data)
+            self.assertEqual(msg.arbitration_id, test_msg.arbitration_id)
 
         reader.stop()

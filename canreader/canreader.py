@@ -5,8 +5,6 @@
 
 import logging
 
-from collections import namedtuple, OrderedDict
-
 import can
 import cantools
 

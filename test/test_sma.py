@@ -5,7 +5,8 @@ from configparser import ConfigParser
 
 import cantools
 
-from gateway import config, translator 
+from gateway import config
+from translator import Translator 
 
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 logger = logging.getLogger('debug')
@@ -74,11 +75,11 @@ class TestSMADBC(unittest.TestCase):
 
 
     def test_update_bad_sig(self):
-        inv = translator.Translator(self.bootstrap['INV_COMM'])
+        inv = Translator(self.bootstrap['INV_COMM'])
         self.assertRaises(KeyError, inv.encode_to_frame, name='JERRY_CTRL', data={'jerry': 1})
 
     def test_update_half_sig(self):
-        inv = translator.Translator(self.bootstrap['INV_COMM'])
+        inv = Translator(self.bootstrap['INV_COMM'])
         
         half_msg_data = {'IO_CTRL_BATT_CHRG_V': 51,
                 'IO_CTRL_BATT_CHRG_I_LIM': 400}
@@ -86,7 +87,7 @@ class TestSMADBC(unittest.TestCase):
         self.assertRaises(TypeError, inv.encode_to_frame, name='IO_CTRL', data=half_msg_data)
 
     def test_update_good_sig(self):
-        inv = translator.Translator(self.bootstrap['INV_COMM'])
+        inv = Translator(self.bootstrap['INV_COMM'])
         
         name = 'IO_CTRL'
         data = {'IO_CTRL_BATT_CHRG_V': 51,

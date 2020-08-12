@@ -5,7 +5,7 @@ from configparser import ConfigParser
 import cantools
 
 from gateway import config
-from gateway.target import Target
+from target import Target
 
 
 class TestTarget(unittest.TestCase):

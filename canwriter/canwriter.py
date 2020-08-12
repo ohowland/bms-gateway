@@ -4,9 +4,6 @@
 """
 
 import logging
-
-from collections import namedtuple, OrderedDict
-
 import can
 import cantools
 
@@ -24,7 +21,6 @@ class CANWriter(object):
         '''
         task = self._tasks.get(name, None)
         if task:
-            print("task found: {}".format(name))
             task.modify_data(msg)
         else:
             task = self._bus.send_periodic(msg, self._update_rate)
