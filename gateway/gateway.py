@@ -15,6 +15,7 @@ async def bms_target(target, queue):
     """ The bms_target loop continiously the bms canbus and enques information
         on the linking queue.
     """
+    logger = logging.getLogger('bms')
 
     cnt = 0
     n = 10 
@@ -24,18 +25,19 @@ async def bms_target(target, queue):
 
         target.update_status()
         await queue.put(target.status)
-        await asyncio.sleep(target.update_rate)
 
         t1 = time.time()
         t_arr[cnt] = t1-t0
         cnt = (cnt + 1) % n
         if cnt == n-1:
-            logging.debug("bms avg loop time: {}".format(sum(t_arr)/n))
+            logger.debug("bms avg loop time: {}".format(sum(t_arr)/n))
         
 
 async def inv_target(target, adapter, queue):
     """ The update loop continiously writes the canbus
     """
+    
+    logger = logging.getLogger('inv')
 
     cnt = 0
     n = 10
@@ -44,17 +46,15 @@ async def inv_target(target, adapter, queue):
         t0 = time.time()
 
         data = await queue.get()
-        
-        if adapter:
-            pass
-
-        target.write_control(data)
+        if data:
+            logging.debug(data)
+        target.write_control()
 
         t1 = time.time()
         t_arr[cnt] = t1-t0
         cnt = (cnt + 1) % n
         if cnt == n-1:
-            logging.debug("inv avg loop time: {}".format(sum(t_arr)/n))
+            logger.debug("inv avg loop time: {}".format(sum(t_arr)/n))
 
 def main(*args, **kwargs):
     """ 
@@ -71,7 +71,7 @@ def main(*args, **kwargs):
     queue = asyncio.Queue(maxsize=1, loop=loop)
 
     loop.create_task(bms_target(bms, queue))
-    loop.create_task(inv_target(inv, translator, queue))
+    loop.create_task(inv_target(inv, adapter, queue))
 
     try:
         loop.run_forever()

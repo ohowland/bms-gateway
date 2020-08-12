@@ -1,4 +1,5 @@
 import logging
+import argparse
 
 import gateway
 
@@ -10,9 +11,11 @@ def main(*args, **kwargs):
     print('-----------------------')
     print('Booting Nuvation-SMA Gateway v0.1')
     print('-----------------------')
+    
+    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
     if kwargs.get('-d'):
-        print('# Logging warnings to console')
+        print('# Logging debug to console')
         logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
     else:
         logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.WARNING)

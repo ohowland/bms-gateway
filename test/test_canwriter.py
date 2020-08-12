@@ -3,8 +3,7 @@ import unittest
 import can
 import time
 
-from gateway import config
-from canwriter import CANWriter
+from gateway import config, canwriter
 
 from pathlib import Path
 from configparser import ConfigParser
@@ -23,7 +22,7 @@ class TestCANWriter(unittest.TestCase):
         pass
 
     def test_config(self):
-        writer = CANWriter(self.bootstrap['INV_COMM'])
+        writer = canwriter.CANWriter(self.bootstrap['INV_COMM'])
 
         self.assertEqual(writer._interface, "virtual")
         self.assertEqual(writer._channel, "vcan0")
@@ -32,7 +31,7 @@ class TestCANWriter(unittest.TestCase):
     def test_writer(self):
         bus = can.interface.Bus("vcan0", bustype="virtual")
 
-        writer = CANWriter(self.bootstrap['INV_COMM'])
+        writer = canwriter.CANWriter(self.bootstrap['INV_COMM'])
         msg_name = 'IO_CTRL'
         msg = can.Message(arbitration_id = 0x321,
                                data = [0xDE, 0xAD, 0xBE, 0xEF],
@@ -49,7 +48,7 @@ class TestCANWriter(unittest.TestCase):
     
     def test_multi_writer_one_msg(self):
         bus = can.interface.Bus("vcan0", bustype="virtual")
-        writer = CANWriter(self.bootstrap['INV_COMM'])
+        writer = canwriter.CANWriter(self.bootstrap['INV_COMM'])
         
         msg_name = 'IO_CTRL'
         msg = can.Message(arbitration_id = 0x321,
@@ -77,7 +76,7 @@ class TestCANWriter(unittest.TestCase):
     
     def test_multi_writer_multi_msg(self):
         bus = can.interface.Bus("vcan0", bustype="virtual")
-        writer = CANWriter(self.bootstrap['INV_COMM'])
+        writer = canwriter.CANWriter(self.bootstrap['INV_COMM'])
        
         msg_name1 = 'IO_CTRL'
         msg1 = can.Message(arbitration_id = 0x321,

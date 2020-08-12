@@ -1,0 +1,17 @@
+VERSION "0.1"
+
+BU_: IO
+
+BO_ 100 IO_CLOCK: 8 IO
+  SG_ IO_CLOCK : 0|64@1+ (1,0) [0|0] "ms" IO
+
+BO_ 101 IO_STACK_V: 4 IO
+  SG_ IO_STACK_V : 0|32@1- (0.001,0) [0|0] "V" IO
+
+BO_ 102 IO_STACK_I: 4 IO
+  SG_ IO_STACK_I : 0|32@1- (0.001,0) [0|0] "A" IO
+
+BO_ 103 IO_SOC: 2 IO
+  SG_ IO_SOC : 0|8@1+ (1,0) [0|0] "%" IO 
+
+

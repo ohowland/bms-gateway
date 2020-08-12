@@ -8,7 +8,7 @@ import can
 import cantools
 
 class CANWriter(object):       
-    def __init__(self, config):
+    def __init__(self, config, loop=None):
         self._interface = config['interface']
         self._channel = config['channel']
         self._baudrate = config['baudrate']
