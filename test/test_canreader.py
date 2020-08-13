@@ -17,24 +17,29 @@ class TestCANReader(unittest.TestCase):
         bootstrap_parser = ConfigParser()
         bootstrap_path = config.get('bootstrap.ini', TESTING=True)
         bootstrap_parser.read(bootstrap_path.as_posix())
-        self.bootstrap = bootstrap_parser
+        self.config = bootstrap_parser['BMS_COMM']
+
+        self.bus = can.interface.Bus(
+            self.config['channel'],
+            bustype=self.config['interface'],
+            bitrate=self.config['baudrate'],
+        )
         self.loop = asyncio.get_event_loop()
 
     def tearDown(self):
+        #TODO: stopping the asyncio loop, and calling bus.shutdown() both
+        # cause the tests to fail, why?
         pass
 
-    def test_config(self):
-        reader = canreader.CANReader(self.bootstrap['BMS_COMM'])
-
-        self.assertEqual(reader.interface, "virtual")
-        self.assertEqual(reader.channel, "vcan1")
-        self.assertEqual(reader.baudrate, "500000")
-
     def test_reader(self):
+        self.loop.run_until_complete(
+            asyncio.gather(self._test_reader())
+        )
+
+    async def _test_reader(self):
         bus = can.interface.Bus("vcan1", bustype="virtual")
-        reader = canreader.CANReader(self.bootstrap['BMS_COMM'], loop=self.loop)
-        
-    async def reader_inner(self):
+        reader = canreader.CANReader(self.config, self.bus, loop=self.loop)
+    
         test_msg = can.Message(arbitration_id = 0x321,
                                 data = [0xDE, 0xAD, 0xBE, 0xEF],
                                 is_extended_id = False) 
@@ -47,9 +52,14 @@ class TestCANReader(unittest.TestCase):
 
         reader.stop()
     
-    async def test_reader_one_can_id(self):
+    def test_reader_one_can_id(self):
+        self.loop.run_until_complete(
+            asyncio.gather(self._test_reader_one_can_id())
+        )
+    
+    async def _test_reader_one_can_id(self):
         bus = can.interface.Bus("vcan1", bustype="virtual")
-        reader = canreader.CANReader(self.bootstrap['BMS_COMM'], loop=loop)
+        reader = canreader.CANReader(self.config, self.bus, loop=self.loop)
         
         test_msg1 = can.Message(arbitration_id = 0x321,
                                 data = [0xDE, 0xAD, 0xBE, 0xEF],
@@ -70,11 +80,16 @@ class TestCANReader(unittest.TestCase):
         self.assertEqual(resp.arbitration_id, test_msg2.arbitration_id)
 
         reader.stop()
+
+    def test_multi_reader_multi_can_ids(self):
+        self.loop.run_until_complete(
+            asyncio.gather(self._test_multi_reader_multi_can_ids())
+        )
     
-    async def test_multi_reader_multi_can_ids(self):
+    async def _test_multi_reader_multi_can_ids(self):
         bus = can.interface.Bus("vcan1", bustype="virtual")
         
-        reader = canreader.CANReader(self.bootstrap['BMS_COMM'], loop=loop)
+        reader = canreader.CANReader(self.config, self.bus, loop=self.loop)
         
         test_msg1 = can.Message(arbitration_id = 0xABC,
                                 data = [0xDE, 0xAD, 0xBE, 0xEF],
@@ -95,10 +110,15 @@ class TestCANReader(unittest.TestCase):
         self.assertEqual(resp.arbitration_id, test_msg2.arbitration_id)
 
         reader.stop()
-
-    async def test_iterator(self):
+        
+    def test_iterator(self):
+        self.loop.run_until_complete(
+            asyncio.gather(self._test_iterator())
+        )
+        
+    async def _test_iterator(self):
         bus = can.interface.Bus("vcan1", bustype="virtual")
-        reader = canreader.CANReader(self.bootstrap['BMS_COMM'], loop=loop)
+        reader = canreader.CANReader(self.config, self.bus, loop=self.loop)
         
         test_msg = can.Message(arbitration_id = 0xABC,
                                 data = [0xDE, 0xAD, 0xBE, 0xEF],
@@ -115,9 +135,14 @@ class TestCANReader(unittest.TestCase):
                                 is_extended_id = False) 
         bus.send(test_msg)
 
-        
-        for msg in reader:
+        cnt = 0 
+        async for msg in reader:
             self.assertEqual(msg.data, test_msg.data)
             self.assertEqual(msg.arbitration_id, test_msg.arbitration_id)
+            cnt += 1
+            if cnt > 2:
+                break
+        else:
+            pass
 
         reader.stop()

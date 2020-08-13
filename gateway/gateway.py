@@ -11,50 +11,29 @@ import time
 from target import Target
 from configparser import ConfigParser
 
+class timer
+
 async def bms_target(target, queue):
     """ The bms_target loop continiously the bms canbus and enques information
         on the linking queue.
     """
-    logger = logging.getLogger('bms')
 
-    cnt = 0
-    n = 10 
-    t_arr = [0]*n
     while True:
-        t0 = time.time()
-
-        target.update_status()
-        await queue.put(target.status)
-
-        t1 = time.time()
-        t_arr[cnt] = t1-t0
-        cnt = (cnt + 1) % n
-        if cnt == n-1:
-            logger.debug("bms avg loop time: {}".format(sum(t_arr)/n))
-        
+        msg = target.read_canbus()
+        target.update_status(msg)
+        await queue.put(msg)
 
 async def inv_target(target, adapter, queue):
     """ The update loop continiously writes the canbus
     """
-    
-    logger = logging.getLogger('inv')
 
-    cnt = 0
-    n = 10
-    t_arr = [0]*n
+    log = logging.getLogger('inv')
     while True:
-        t0 = time.time()
-
         data = await queue.get()
         if data:
-            logging.debug(data)
-        target.write_control()
-
-        t1 = time.time()
-        t_arr[cnt] = t1-t0
-        cnt = (cnt + 1) % n
-        if cnt == n-1:
-            logger.debug("inv avg loop time: {}".format(sum(t_arr)/n))
+            log.debug(data)
+            target.update_control(msg)
+            target.write_canbus(msg)
 
 def main(*args, **kwargs):
     """ 
@@ -66,14 +45,14 @@ def main(*args, **kwargs):
     bms = Target(bootstrap_config['BMS_COMM'])
     inv = Target(bootstrap_config['INV_COMM'])
 
-    adapter = None 
+    queue = asyncio.Queue(maxsize=10, loop=loop)
 
-    queue = asyncio.Queue(maxsize=1, loop=loop)
-
-    loop.create_task(bms_target(bms, queue))
-    loop.create_task(inv_target(inv, adapter, queue))
+    task_bms = loop.create_task(bms_target(bms, queue))
+    task_inv = vloop.create_task(inv_target(inv, queue))
 
     try:
         loop.run_forever()
     except:
+        task_bms.cancel()
+        task_inv.cancel()
         loop.close()

@@ -8,7 +8,7 @@ import logging
 import can
 import cantools
 
-log = logging.get_logger('sys')
+log = logging.getLogger('sys')
 
 class CANReader(object):       
     def __init__(self, config, bus, loop):
@@ -24,7 +24,7 @@ class CANReader(object):
     async def __anext__(self):
         msg = await self._listener.get_message()
         if not msg:
-            raise StopAsyncIteration
+           raise StopAsyncIteration
         else:
             log.debug(msg)
             return msg
@@ -35,6 +35,6 @@ class CANReader(object):
 
     def stop(self):
         try:
-            self._notifer.stop()
-        except as e:
+            self._notifier.stop()
+        except Exception as e:
             log.warning(e)

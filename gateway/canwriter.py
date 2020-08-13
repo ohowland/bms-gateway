@@ -7,7 +7,7 @@ import logging
 import can
 import cantools
 
-log = logging.get_logger('sys')
+log = logging.getLogger('sys')
 
 class CANWriter(object):       
     def __init__(self, config, bus):
@@ -33,7 +33,7 @@ class CANWriter(object):
         for task in self._tasks.values():
             try:
                 task.stop()
-            except as e:
+            except Exception as e:
                 log.warning(e)
                 
 

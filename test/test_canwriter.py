@@ -16,22 +16,19 @@ class TestCANWriter(unittest.TestCase):
         bootstrap_parser = ConfigParser()
         bootstrap_path = config.get('bootstrap.ini', TESTING=True)
         bootstrap_parser.read(bootstrap_path.as_posix())
-        self.bootstrap = bootstrap_parser
+        self.config = bootstrap_parser['INV_COMM']
+
+        self.bus = can.interface.Bus(
+            self.config['channel'],
+            bustype=self.config['interface'],
+            bitrate=self.config['baudrate'],
+        )
 
     def tearDown(self):
         pass
 
-    def test_config(self):
-        writer = canwriter.CANWriter(self.bootstrap['INV_COMM'])
-
-        self.assertEqual(writer._interface, "virtual")
-        self.assertEqual(writer._channel, "vcan0")
-        self.assertEqual(writer._baudrate, "500000")
-
     def test_writer(self):
-        bus = can.interface.Bus("vcan0", bustype="virtual")
-
-        writer = canwriter.CANWriter(self.bootstrap['INV_COMM'])
+        writer = canwriter.CANWriter(self.config, self.bus)
         msg_name = 'IO_CTRL'
         msg = can.Message(arbitration_id = 0x321,
                                data = [0xDE, 0xAD, 0xBE, 0xEF],
@@ -40,15 +37,14 @@ class TestCANWriter(unittest.TestCase):
         
         writer.publish(msg_name, msg)
 
-        resp = bus.recv()
+        resp = self.bus.recv()
         self.assertEqual(msg.data, resp.data)
         self.assertEqual(msg.arbitration_id, resp.arbitration_id)
         
         writer.stop()
     
     def test_multi_writer_one_msg(self):
-        bus = can.interface.Bus("vcan0", bustype="virtual")
-        writer = canwriter.CANWriter(self.bootstrap['INV_COMM'])
+        writer = canwriter.CANWriter(self.config, self.bus)
         
         msg_name = 'IO_CTRL'
         msg = can.Message(arbitration_id = 0x321,
@@ -66,7 +62,7 @@ class TestCANWriter(unittest.TestCase):
         writer.publish(msg_name, msg)
       
         c = 0 
-        for msg in bus:
+        for msg in self.bus:
             if c == 3:
                 break
             self.assertEqual(msg.arbitration_id, 0x321)
@@ -75,8 +71,7 @@ class TestCANWriter(unittest.TestCase):
         writer.stop()
     
     def test_multi_writer_multi_msg(self):
-        bus = can.interface.Bus("vcan0", bustype="virtual")
-        writer = canwriter.CANWriter(self.bootstrap['INV_COMM'])
+        writer = canwriter.CANWriter(self.config, self.bus)
        
         msg_name1 = 'IO_CTRL'
         msg1 = can.Message(arbitration_id = 0x321,
@@ -94,11 +89,12 @@ class TestCANWriter(unittest.TestCase):
                           timestamp = time.time())
         
         writer.publish(msg_name2, msg2)
-         
+
         c = 0
-        for msg in bus:
+        for msg in self.bus:
+            print(msg)
             c += 1
-            if c > 4:
+            if c > 3:
                 break
             if msg.arbitration_id == 0x321:
                 continue
