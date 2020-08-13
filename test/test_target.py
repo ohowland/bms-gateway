@@ -14,32 +14,25 @@ class TestTarget(unittest.TestCase):
         bootstrap_parser = ConfigParser()
         bootstrap_path = config.get('bootstrap.ini', TESTING=True)
         bootstrap_parser.read(bootstrap_path.as_posix())
-        self.bootstrap = bootstrap_parser
+        self.config = bootstrap_parser['INV_COMM']
+        self.loop = asyncio.get_event_loop()
 
     def tearDown(self):
         pass
 
-    def test_write_control(self):
-        
-        async def spawn_reader(target, test, test_pkg):
-            resp = target.update_status()
-            test(test_pkg[1], resp[test_pkg[0]])
+    def test_write_canbus(self):
+        self.loop.run_until_complete(
+            asyncio.gather(self._test_write_canbus())
+        )
 
-        loop = asyncio.get_event_loop()
-        inv = target.Target(self.bootstrap['INV_COMM'], loop)
+    async def _test_write_canbus(self):
+        inv = target.Target(self.config, self.loop)
 
         test_name = 'IO_STATE'
         test_data = {'IO_STATE_SOC': 67,
                 'IO_STATE_SOH': 98, 'IO_STATE_SOC_HIRES': 67.14} 
         
-        inv._control.update({test_name: test_data}) 
-        inv.write_control()
-
-        coro = spawn_reader(inv, self.assertEqual, [test_name, test_data])
-        loop.run_until_complete(coro)
-
-        inv.stop()
-
+        inv.write_canbus({test_name: test_data})
 
 '''
     def test_update_status(self):

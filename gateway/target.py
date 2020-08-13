@@ -3,6 +3,7 @@
     About: targets for canbus
 """
 import logging
+import can
 
 import translator
 import canreader

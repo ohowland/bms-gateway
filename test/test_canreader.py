@@ -37,7 +37,6 @@ class TestCANReader(unittest.TestCase):
         )
 
     async def _test_reader(self):
-        bus = can.interface.Bus("vcan1", bustype="virtual")
         reader = canreader.CANReader(self.config, self.bus, loop=self.loop)
     
         test_msg = can.Message(arbitration_id = 0x321,
@@ -58,7 +57,6 @@ class TestCANReader(unittest.TestCase):
         )
     
     async def _test_reader_one_can_id(self):
-        bus = can.interface.Bus("vcan1", bustype="virtual")
         reader = canreader.CANReader(self.config, self.bus, loop=self.loop)
         
         test_msg1 = can.Message(arbitration_id = 0x321,
@@ -87,8 +85,6 @@ class TestCANReader(unittest.TestCase):
         )
     
     async def _test_multi_reader_multi_can_ids(self):
-        bus = can.interface.Bus("vcan1", bustype="virtual")
-        
         reader = canreader.CANReader(self.config, self.bus, loop=self.loop)
         
         test_msg1 = can.Message(arbitration_id = 0xABC,
@@ -117,7 +113,6 @@ class TestCANReader(unittest.TestCase):
         )
         
     async def _test_iterator(self):
-        bus = can.interface.Bus("vcan1", bustype="virtual")
         reader = canreader.CANReader(self.config, self.bus, loop=self.loop)
         
         test_msg = can.Message(arbitration_id = 0xABC,
