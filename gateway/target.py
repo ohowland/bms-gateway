@@ -2,17 +2,24 @@
     Author: Howl & Edgerton, llc 2020
     About: targets for canbus
 """
+import logging
+
 import translator
 import canreader
 import canwriter
 
+log = logging.get_logger('sys')
+
 class Target(object):
-    def __init__(self, config, loop=None):
+    def __init__(self, config, loop):
+        self._bus = can.interface.Bus(config['channel'],
+                                     bustype=config['interface'], 
+                                     bitrate=config['baudrate'])
         self._trans = translator.Translator(config)
         self._status = dict()
         self._control = dict()
-        self._reader = canreader.CANReader(config, loop=loop)
-        self._writer = canwriter.CANWriter(config, loop=loop)
+        self._reader = canreader.CANReader(config, self._bus, loop)
+        self._writer = canwriter.CANWriter(config, self._bus)
 
     def __repr__(self):
         return "Status: {}\nControl: {}\n"\
@@ -30,14 +37,15 @@ class Target(object):
     def control(self):
         return self._control
 
-
     @property
     def trans(self):
         return self._trans
 
-    def update_status(self):
-        for msg in self._reader: 
+    async def update_status(self):
+        async for msg in self._reader: 
             yield self._trans.decode_from_frame(msg)
+        else:
+            return None
             
     def write_control(self):
         for name, data in self._control.items():
@@ -47,10 +55,15 @@ class Target(object):
     def stop(self):
         try:
             self._reader.stop()
-        except:
-            pass
+        except as e:
+            log.warning(e)
 
         try:
             self._writer.stop()
-        except:
-            pass
+        except as e:
+            log.warning(e)
+
+        try:
+            self._bus.shutdown()
+        except as e:
+            log.warning(e)

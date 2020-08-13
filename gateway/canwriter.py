@@ -7,14 +7,16 @@ import logging
 import can
 import cantools
 
+log = logging.get_logger('sys')
+
 class CANWriter(object):       
-    def __init__(self, config, loop=None):
-        self._interface = config['interface']
-        self._channel = config['channel']
-        self._baudrate = config['baudrate']
+    def __init__(self, config, bus):
+        self._bus = bus
         self._update_rate = float(config['update_rate'])
-        self._bus = can.interface.Bus(self._channel, bustype=self._interface, bitrate=self._baudrate)
         self._tasks = {}
+
+    def __del__(self):
+        self.stop()
 
     def publish(self, name, msg):
         ''' iterate messages, check if a task is to be created or modified 
@@ -23,10 +25,15 @@ class CANWriter(object):
         if task:
             task.modify_data(msg)
         else:
+            log.debug("new task created {}".format(name))
             task = self._bus.send_periodic(msg, self._update_rate)
             self._tasks.update({name: task})
 
     def stop(self):
         for task in self._tasks.values():
-            task.stop()
+            try:
+                task.stop()
+            except as e:
+                log.warning(e)
+                
 

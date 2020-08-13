@@ -20,26 +20,31 @@ class TestTarget(unittest.TestCase):
         pass
 
     def test_write_control(self):
-        inv = target.Target(self.bootstrap['INV_COMM'])
+        
+        async def spawn_reader(target, test, test_pkg):
+            resp = target.update_status()
+            test(test_pkg[1], resp[test_pkg[0]])
+
+        loop = asyncio.get_event_loop()
+        inv = target.Target(self.bootstrap['INV_COMM'], loop)
 
         test_name = 'IO_STATE'
         test_data = {'IO_STATE_SOC': 67,
-                'IO_STATE_SOH': 98,
-                'IO_STATE_SOC_HIRES': 67.14}
-
-        inv._control.update({test_name: test_data})
+                'IO_STATE_SOH': 98, 'IO_STATE_SOC_HIRES': 67.14} 
         
+        inv._control.update({test_name: test_data}) 
         inv.write_control()
-        time.sleep(0.5)
-        resp = inv.update_status()
 
-        self.assertEqual(test_data, resp[test_name])
+        coro = spawn_reader(inv, self.assertEqual, [test_name, test_data])
+        loop.run_until_complete(coro)
 
         inv.stop()
 
+
+'''
     def test_update_status(self):
         loop = asyncio.get_event_loop()
-
+        test(resp)
         inv = target.Target(self.bootstrap['INV_COMM'], loop=loop)
         bms = target.Target(self.bootstrap['BMS_COMM'], loop=loop)
 
@@ -50,17 +55,15 @@ class TestTarget(unittest.TestCase):
 
         loop.run_forever()    
 
-async def bms_target(target, queue):
+def bms_target(target, queue):
     while True:
         data = target.update_status()
         print("sending:", data)
-        await queue.put(data)
+        queue.put_nowait(data)
 
-async def inv_target(target, queue):
+def inv_target(target, queue):
     while True:
-        data = await queue.get()
+        data = queue.get_nowait()
         print("recieved:", data)
         target.write_control(data)
-
-
-
+'''
