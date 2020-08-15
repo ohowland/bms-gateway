@@ -17,118 +17,90 @@ class TestCANReader(unittest.TestCase):
         bootstrap_parser = ConfigParser()
         bootstrap_path = config.get('bootstrap.ini', TESTING=True)
         bootstrap_parser.read(bootstrap_path.as_posix())
-        self.config = bootstrap_parser['BMS_COMM']
+        self.config = bootstrap_parser['INV_COMM']
 
         self.bus = can.interface.Bus(
             self.config['channel'],
             bustype=self.config['interface'],
             bitrate=self.config['baudrate'],
         )
-        self.loop = asyncio.get_event_loop()
-
+        
     def tearDown(self):
-        #TODO: stopping the asyncio loop, and calling bus.shutdown() both
-        # cause the tests to fail, why?
         pass
 
     def test_reader(self):
+        self.loop = asyncio.get_event_loop()
         self.loop.run_until_complete(
             asyncio.gather(self._test_reader())
         )
 
     async def _test_reader(self):
-        reader = canreader.CANReader(self.config, self.bus, loop=self.loop)
-    
+        self.bus.flush_tx_buffer()
+        reader = canreader.CANReader(self.config, self.bus, self.loop)
+
         test_msg = can.Message(arbitration_id = 0x321,
                                 data = [0xDE, 0xAD, 0xBE, 0xEF],
                                 is_extended_id = False) 
-        bus.send(test_msg)
-
+        
+        task = self.bus.send_periodic(test_msg, float(self.config['update_rate']))
         resp = await reader.get_message()
-
+        task.stop()
+        
         self.assertEqual(resp.data, test_msg.data)
         self.assertEqual(resp.arbitration_id, test_msg.arbitration_id)
 
         reader.stop()
-    
+
     def test_reader_one_can_id(self):
+        self.loop = asyncio.get_event_loop()
         self.loop.run_until_complete(
             asyncio.gather(self._test_reader_one_can_id())
         )
     
     async def _test_reader_one_can_id(self):
-        reader = canreader.CANReader(self.config, self.bus, loop=self.loop)
+        self.bus.flush_tx_buffer()
+        reader = canreader.CANReader(self.config, self.bus, self.loop)
         
         test_msg1 = can.Message(arbitration_id = 0x321,
                                 data = [0xDE, 0xAD, 0xBE, 0xEF],
                                 is_extended_id = False) 
-        bus.send(test_msg1)
+        
+        task1 = self.bus.send_periodic(test_msg1, .5)
 
+        resp = await reader.get_message()
+        task1.stop()
+
+        self.assertEqual(resp.data, test_msg1.data)
+        self.assertEqual(resp.arbitration_id, test_msg1.arbitration_id)
+        
         test_msg2 = can.Message(arbitration_id = 0x321,
                                 data = [0xCA, 0xFE, 0x12, 0x34],
                                 is_extended_id = False) 
-        bus.send(test_msg2)
-
-        resp = await reader.get_message()
-        self.assertEqual(resp.data, test_msg1.data)
-        self.assertEqual(resp.arbitration_id, test_msg1.arbitration_id)
         
+        task2 = self.bus.send_periodic(test_msg2, .5)
         resp = await reader.get_message()
+        task2.stop()
+
         self.assertEqual(resp.data, test_msg2.data)
         self.assertEqual(resp.arbitration_id, test_msg2.arbitration_id)
 
         reader.stop()
 
-    def test_multi_reader_multi_can_ids(self):
-        self.loop.run_until_complete(
-            asyncio.gather(self._test_multi_reader_multi_can_ids())
-        )
-    
-    async def _test_multi_reader_multi_can_ids(self):
-        reader = canreader.CANReader(self.config, self.bus, loop=self.loop)
-        
-        test_msg1 = can.Message(arbitration_id = 0xABC,
-                                data = [0xDE, 0xAD, 0xBE, 0xEF],
-                                is_extended_id = False) 
-        bus.send(test_msg1)
-
-        test_msg2 = can.Message(arbitration_id = 0xDEF,
-                                data = [0xCA, 0xFE, 0x12, 0x34],
-                                is_extended_id = False) 
-        bus.send(test_msg2)
-
-        resp = await reader.get_message()
-        self.assertEqual(resp.data, test_msg1.data)
-        self.assertEqual(resp.arbitration_id, test_msg1.arbitration_id)
-        
-        resp = await reader.get_message()
-        self.assertEqual(resp.data, test_msg2.data)
-        self.assertEqual(resp.arbitration_id, test_msg2.arbitration_id)
-
-        reader.stop()
-        
     def test_iterator(self):
+        self.loop = asyncio.get_event_loop()
         self.loop.run_until_complete(
             asyncio.gather(self._test_iterator())
         )
         
     async def _test_iterator(self):
-        reader = canreader.CANReader(self.config, self.bus, loop=self.loop)
+        self.bus.flush_tx_buffer()
+        reader = canreader.CANReader(self.config, self.bus, self.loop)
         
-        test_msg = can.Message(arbitration_id = 0xABC,
+        test_msg = can.Message(arbitration_id = 0x321,
                                 data = [0xDE, 0xAD, 0xBE, 0xEF],
                                 is_extended_id = False) 
-        bus.send(test_msg)
-
-        test_msg = can.Message(arbitration_id = 0xABC,
-                                data = [0xDE, 0xAD, 0xBE, 0xEF],
-                                is_extended_id = False) 
-        bus.send(test_msg)
         
-        test_msg = can.Message(arbitration_id = 0xABC,
-                                data = [0xDE, 0xAD, 0xBE, 0xEF],
-                                is_extended_id = False) 
-        bus.send(test_msg)
+        task = self.bus.send_periodic(test_msg, .1)
 
         cnt = 0 
         async for msg in reader:
@@ -140,4 +112,5 @@ class TestCANReader(unittest.TestCase):
         else:
             pass
 
+        task.stop()
         reader.stop()

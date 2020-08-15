@@ -7,11 +7,10 @@ import asyncio
 import os
 import logging
 import time
+import signal
 
 from target import Target
 from configparser import ConfigParser
-
-class timer
 
 async def bms_target(target, queue):
     """ The bms_target loop continiously the bms canbus and enques information
@@ -42,17 +41,17 @@ def main(*args, **kwargs):
     loop = asyncio.get_event_loop()
     bootstrap_config = kwargs['bootstrap']
 
-    bms = Target(bootstrap_config['BMS_COMM'])
-    inv = Target(bootstrap_config['INV_COMM'])
+    bms = Target(bootstrap_config['BMS_COMM'], loop)
+    inv = Target(bootstrap_config['INV_COMM'], loop)
 
     queue = asyncio.Queue(maxsize=10, loop=loop)
 
     task_bms = loop.create_task(bms_target(bms, queue))
-    task_inv = vloop.create_task(inv_target(inv, queue))
+    task_inv = loop.create_task(inv_target(inv, None, queue))
 
     try:
         loop.run_forever()
     except:
-        task_bms.cancel()
-        task_inv.cancel()
+        #task_bms.cancel()
+        #task_inv.cancel()
         loop.close()

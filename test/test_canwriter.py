@@ -34,15 +34,15 @@ class TestCANWriter(unittest.TestCase):
                                data = [0xDE, 0xAD, 0xBE, 0xEF],
                                is_extended_id = False,
                                timestamp = time.time())
-        
-        writer.publish(msg_name, msg)
 
+        writer.publish(msg_name, msg)
         resp = self.bus.recv()
+
         self.assertEqual(msg.data, resp.data)
         self.assertEqual(msg.arbitration_id, resp.arbitration_id)
         
         writer.stop()
-    
+
     def test_multi_writer_one_msg(self):
         writer = canwriter.CANWriter(self.config, self.bus)
         

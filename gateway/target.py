@@ -46,22 +46,22 @@ class Target(object):
     def update_control(self, msg):
         self._control.update(msg)
 
-    async def read_canbus(self) -> dict:
-        msg = self._reader.get_message() 
-        return self._trans.decode_from_frame(msg)
+    async def read_canbus(self):
+        ''' await a message in the asynchronous read buffer
         '''
-        async for msg in self._reader: 
-            yield self._trans.decode_from_frame(msg)
-        else:
-            return None
-        '''  
+        msg = await self._reader.get_message() 
+        return self._trans.decode_from_frame(msg)
 
     def write_canbus(self, msg):
-        for name, data in self._control.items():
+        ''' decode msg and write/update canbus periodic send task
+        '''
+        for name, data in msg.items():
             encoded = self._trans.encode_to_frame(name, data)
             self._writer.publish(name, encoded)
 
     def stop(self):
+        log.debug("Target shutting down")
+        '''
         try:
             self._reader.stop()
         except Exception as e:
@@ -72,6 +72,7 @@ class Target(object):
         except Exception as e:
             log.warning(e)
 
+        '''
         try:
             self._bus.shutdown()
         except Exception as e:

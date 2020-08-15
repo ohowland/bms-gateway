@@ -16,13 +16,14 @@ class Translator(object):
         return self._db
 
 
-    def decode_from_frame(self, msg: can.Message) -> dict:
+    def decode_from_frame(self, msg):
         try:
             decoded_data = self.db.decode_message(msg.arbitration_id, msg.data, scaling=True) 
             msg_name = self.db.get_message_by_frame_id(msg.arbitration_id).name
             return {msg_name: decoded_data}
-        except:
-            raise TypeError("unable to decode frame id: {}".format(msg.arbitration_id))
+        except :
+            err = "unable to decode frame id: {}".format(msg.arbitration_id)
+            raise TypeError(err)
 
     def encode_to_frame(self, name: str, data: dict) -> can.Message:
         try:

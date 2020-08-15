@@ -25,11 +25,11 @@ class CANWriter(object):
         if task:
             task.modify_data(msg)
         else:
-            log.debug("new task created {}".format(name))
             task = self._bus.send_periodic(msg, self._update_rate)
             self._tasks.update({name: task})
 
     def stop(self):
+        log.debug("canwriter stoppping")
         for task in self._tasks.values():
             try:
                 task.stop()

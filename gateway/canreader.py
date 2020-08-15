@@ -13,7 +13,7 @@ log = logging.getLogger('sys')
 class CANReader(object):       
     def __init__(self, config, bus, loop):
         self._listener = can.AsyncBufferedReader()
-        self._notifier = can.Notifier(bus, [self._listener], loop=loop)
+        self._notifier = can.Notifier(bus, [self._listener], loop=loop) 
 
     def __del__(self):
         self.stop()
@@ -26,7 +26,6 @@ class CANReader(object):
         if not msg:
            raise StopAsyncIteration
         else:
-            log.debug(msg)
             return msg
 
     async def get_message(self):
@@ -34,6 +33,7 @@ class CANReader(object):
         return msg
 
     def stop(self):
+        log.debug('canreader stopping')
         try:
             self._notifier.stop()
         except Exception as e:
