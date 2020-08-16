@@ -6,8 +6,10 @@ import logging
 import cantools
 import can
 
+log = logging.getLogger('sys')
+
 class Framer(object):
-    
+
     def __init__(self, config):
         self._db = cantools.database.load_file(config['dbc_filepath'])
 
@@ -18,18 +20,21 @@ class Framer(object):
 
     def decode_from_frame(self, msg):
         try:
+            print(msg)
             decoded_data = self.db.decode_message(msg.arbitration_id, msg.data, scaling=True) 
+            print(decoded_data)
             msg_name = self.db.get_message_by_frame_id(msg.arbitration_id).name
             return {msg_name: decoded_data}
-        except :
-            err = "unable to decode frame id: {}".format(msg.arbitration_id)
-            raise TypeError(err)
+        except KeyError as e:
+            log.warning("unable to decode message 0x{:02x}".format(int(str(e))))
+            return None
+
 
     def encode_to_frame(self, name: str, data: dict) -> can.Message:
         try:
             template = self.db.get_message_by_name(name)
-        except:
-            raise KeyError("message name {} does not exist in .DBC database".format(name))
+        except Exception as e:
+            log.warning(e)
 
         try:
             encoded_data = self.db.encode_message(template.frame_id, data, scaling=True)
@@ -38,6 +43,8 @@ class Framer(object):
                               is_extended_id = template.is_extended_frame,
                               dlc = template.length)
             return msg
-        except:
-            raise TypeError("unable to encode frame id: {}".format(template.frame_id))
 
+        except Exception as e:
+            log.warning(e)
+
+            return None

@@ -23,6 +23,7 @@ class Target(object):
         self._control = dict()
         self._reader = canreader.CANReader(config, self._bus, loop)
         self._writer = canwriter.CANWriter(config, self._bus)
+        self._write_buffer = list() 
 
     def __repr__(self):
         return "Status: {}\nControl: {}\n"\
@@ -44,20 +45,37 @@ class Target(object):
         self._status.update(msg)
 
     def update_control(self, msg):
+        ''' update control mutates the internal control state of the target
+            object. this includes appending changed control messages to the
+            write buffer.
+        '''
         self._control.update(msg)
+        for name in msg.keys():
+            complete_data = self._control[name]
+            self._write_buffer.append({name, complete_data})
 
     async def read_canbus(self):
-        ''' await a message in the asynchronous read buffer
+        ''' Returns a dictionary of structure {msg_name: {signal_name: value}}
+            or None. This call is asynchrous and will await a message in 
+            the asynchronous canbus read buffer
         '''
         msg = await self._reader.get_message() 
         return self._framer.decode_from_frame(msg)
 
     def write_canbus(self, msg):
-        ''' decode msg and write/update canbus periodic send task
+        ''' Encodes msg and if successful, writes the encoded message to the
+            canbus as a periodic write. The periodic rate is defined by the
+            update_rate object field.
         '''
         for name, data in msg.items():
             encoded = self._framer.encode_to_frame(name, data)
-            self._writer.publish(name, encoded)
+            if encoded:
+                self._writer.publish(name, encoded)
+
+    def get_write_buffer(self):
+        write_buffer = self._write_buffer
+        self._write_buffer = list()
+        return write_buffer
 
     def stop(self):
         log.debug("Target shutting down")
