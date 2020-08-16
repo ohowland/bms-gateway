@@ -25,4 +25,5 @@ class TestTranslator(unittest.TestCase):
         t_msg = t.translate(msg)
 
         assertedMsg = {"IO_STATUS": {"IO_STATUS_V": 45, "IO_STATUS_I": 200}}
+        self.assertEqual(t_msg, assertedMsg)
         
