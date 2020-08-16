@@ -1,12 +1,38 @@
-# Install the Peak Linux Drivers (download latest from website)
+# Setup of Gateway Hardware
+## Install the Peak Linux Drivers (download latest from website)
 
-`make`   
-`make -C driver NET=NETDEV_SUPPORT`  
-`sudo make install`  
-`sudo modprobe pcan`  
-`ifconfig -ai`  
+`https://www.peak-system.com/fileadmin/media/linux/index.htm`
+
+```
+make
+make -C driver NET=NETDEV_SUPPORT
+sudo make install
+sudo modprobe pcan
+ifconfig -ai
+```  
 
 `grep PEAK_ /boot/config-'uname -r'`   
+
+## Auto-up CAN interfaces
+The script `setup/canup.sh` will configure the `/etc/network/interface` with the following:
+``` 
+auto can0  
+iface can0 inet manual  
+  pre-up /sbin/ip link set $IFACE type can bitrate 500000
+  up /sbin/ifconfig $iface up  
+  down /sbin/ifconfig $iface up
+
+auto can1  
+iface can1 inet manual  
+  pre-up /sbin/ip link set $IFACE type can bitrate 500000
+  up /sbin/ifconfig $iface up  
+  down /sbin/ifconfig $iface up
+```
+the network service must be reset after installation:
+
+`sudo /etc/init.d/networking restart`  
+OR  
+`sudo systemctl restart networking`
 
 # Setup test environment
 
@@ -35,9 +61,7 @@ Another option is to use pcanview, which may expedite the process.
 unsure if Nuvation BMS is litten endian or big endian. They're also not very clear on the size and scaling of the registers. using cantools:  
 
 `candump can0 | cantools decode config/*.dbc`   
-
 OR
-
 `cantools monitor config/*.dbc`  
 
 and matching against values read from nuvation BMS.
