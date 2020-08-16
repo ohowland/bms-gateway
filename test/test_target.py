@@ -39,7 +39,7 @@ class TestTarget(unittest.TestCase):
 
         resp = await inv.read_canbus()
 
-        for name, data in resp.items():
+        for _, data in resp.items():
             self.assertEqual(data, test_data)
 
     def test_queue_pass(self):
@@ -64,7 +64,7 @@ async def bms_target(target, queue):
                 'IO_STATE_SOC_HIRES': 67.14,
     } 
     while True:
-        data = tatus()
+        data = {test_name, test_data}
         print("sending:", data)
         await queue.put(data)
         break

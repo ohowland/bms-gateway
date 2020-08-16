@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../g
 
 import canreader
 import canwriter
-import translator
+import framer
 import target
 import config
+import translator

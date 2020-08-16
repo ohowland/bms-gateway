@@ -5,7 +5,7 @@
 import logging
 import can
 
-import translator
+import framer
 import canreader
 import canwriter
 
@@ -18,7 +18,7 @@ class Target(object):
             bustype=config['interface'], 
             bitrate=config['baudrate'],
         )
-        self._trans = translator.Translator(config)
+        self._framer = framer.Framer(config)
         self._status = dict()
         self._control = dict()
         self._reader = canreader.CANReader(config, self._bus, loop)
@@ -50,13 +50,13 @@ class Target(object):
         ''' await a message in the asynchronous read buffer
         '''
         msg = await self._reader.get_message() 
-        return self._trans.decode_from_frame(msg)
+        return self._framer.decode_from_frame(msg)
 
     def write_canbus(self, msg):
         ''' decode msg and write/update canbus periodic send task
         '''
         for name, data in msg.items():
-            encoded = self._trans.encode_to_frame(name, data)
+            encoded = self._framer.encode_to_frame(name, data)
             self._writer.publish(name, encoded)
 
     def stop(self):
