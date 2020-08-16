@@ -16,9 +16,8 @@ will need PCANusb and linux host.
 
 `pip install cantools`
 
-
-Connect PCANusb to linux test pc check the link:
-`ip link dev set can0 type can bitrate 500000`
+Connect PCANusb to linux test pc check the link:  
+`ip link dev set can0 type can bitrate 500000`  
 `ip link set can0 up`
 
 # CANbus verification
