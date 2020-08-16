@@ -1,0 +1,9 @@
+- [ ] Instrument software to log all the errors in debug mode
+- [ ] Setup network for ssh access from local splashtop machine
+- [ ] Write integration tests
+- [ ] Build connectors with termination
+- [ ] Install mPCIe cards
+- [ ] Install and test PCAN drivers on embedded PC
+- [ ] Write scripts for auto boot
+- [ ] Write chronjob scripts for pushing errors to github 
+- [ ] Command line interface dump object data.
