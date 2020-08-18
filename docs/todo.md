@@ -5,6 +5,7 @@
   1. [x] Document process for checking CAN signal integrity
   2. [ ] Process for checking CAN messaging integrity (scale, addr, size)
 - [x] Document connector build
+- [ ] Finalize parts list
 
 # Core Code
 - [x] Use filters on CANreader to reject unknown messages
@@ -13,7 +14,7 @@
 - [x] Finish DBC for nuvation
 - [ ] Define method for translating nuvation alarms (bool) to SMA alarm (two bit)
 - [ ] Define method for writing static values to SMA
-- [ ] Read a charge V and discharge V from nuvation, report to SMA 
+- [ ] Read a charge V and discharge V from nuvation, report to SMA. what registers are we mapping? these registers are in the dbc file after the nuvation alarms.
 
 # Testing hardware/code
 - [ ] Check unit test coverage
@@ -36,3 +37,8 @@
 # Gateway configraution
 - [ ] SSH access from ethernet interface
 - [ ] Install and test PCAN drivers on embedded PC
+
+# Component Ordering
+- [x] 2x LogicSupply PCs
+- [x] 2x Peak mPCIe dual can cards
+- [x] 4x CAN-RJ45 converters
