@@ -30,3 +30,31 @@ class TestTranslator(unittest.TestCase):
 
         assertedMsg = {"IO_STATE": {"IO_STATE_SOC": 0.62, "IO_STATE_SOC_HIRES": 0.62}}
         self.assertEqual(t_msg, assertedMsg)
+    
+    def test_translate_inverted_alarm(self):
+        msg = {"IO_OVERALL_SAFE": {"IO_OVERALL_SAFE": 1}}
+        t_msg = self.t.translate(msg)
+
+        assertedMsg = {"IO_ALARM": {"IO_ALARM_GENERAL_ARRIVE": 0, "IO_ALARM_GENERAL_LEAVE": 1}}
+        self.assertEqual(t_msg, assertedMsg)
+    
+    def test_translate_inverted_alarm_flipped(self):
+        msg = {"IO_OVERALL_SAFE": {"IO_OVERALL_SAFE": 0}}
+        t_msg = self.t.translate(msg)
+
+        assertedMsg = {"IO_ALARM": {"IO_ALARM_GENERAL_ARRIVE": 1, "IO_ALARM_GENERAL_LEAVE": 0}}
+        self.assertEqual(t_msg, assertedMsg)
+    
+    def test_translate_noninverted_alarm(self):
+        msg = {"IO_FAULT_STACK_HI_V": {"IO_FAULT_STACK_HI_V": 1}}
+        t_msg = self.t.translate(msg)
+
+        assertedMsg = {"IO_ALARM": {"IO_ALARM_HI_V_ARRIVE": 1, "IO_ALARM_HI_V_LEAVE": 0}}
+        self.assertEqual(t_msg, assertedMsg)
+    
+    def test_translate_noninverted_alarm_flipped(self):
+        msg = {"IO_FAULT_STACK_HI_V": {"IO_FAULT_STACK_HI_V": 0}}
+        t_msg = self.t.translate(msg)
+
+        assertedMsg = {"IO_ALARM": {"IO_ALARM_HI_V_ARRIVE": 0, "IO_ALARM_HI_V_LEAVE": 1}}
+        self.assertEqual(t_msg, assertedMsg)

@@ -3,22 +3,148 @@
 """
 
 import logging
+import re
+from functools import partial
 
-BMS = { 
+log = logging.getLogger('translator')
+
+alarm_re = re.compile("^\w+_(ARRIVE|LEAVE)$")
+
+class Translator(object):
+    def __init__(self):
+        self._map = BMS_TO_SMA
+
+
+    def translate(self, from_msg):
+        ''' returns a translated message mapped from bms to sma
+        '''
+
+        to_msgs = {}
+        for msg_name, sigs in from_msg.items():
+            for sig_name, sig_val in sigs.items():
+                 to_msg = self._get_mapping(msg_name, sig_name)
+                 to_msgs = to_msg.transfer_function(
+                         sig_val = sig_val,
+                         to_msgs = to_msgs)
+
+        return to_msgs
+    
+    def _get_mapping(self, msg_name, sig_name):
+        ''' returns a dict{set{}} {message_name: {signal name(s)}} for the inverter 
+            that correspond to the message name and signal name provided
+        '''
+
+        return self._map[msg_name][sig_name]
+
+
+def _map_alarm_sig(to_msg, sig_val, to_msgs):
+    ''' returns a mutate to_msgs which contains a mapped boolean alarm value
+    '''
+
+    for msg_name, sig_names in to_msg.items():
+        for sig_name in sig_names:
+            m = alarm_re.match(sig_name)
+            if m:
+                log.debug(m.group(1))
+                if m.group(1) == "ARRIVE":
+                    to_msgs = _write_sig_val(
+                            msg_name,
+                            sig_name,
+                            sig_val,
+                            to_msgs,
+                    )
+                elif m.group(1) == "LEAVE":
+                    to_msgs = _write_sig_val(
+                            msg_name,
+                            sig_name,
+                            not sig_val, # flip the bit, leave == !arrive
+                            to_msgs,
+                    )
+                else:
+                        log.warning("unable to match alarm signal: {}".format(sig_name))
+
+        return to_msgs
+
+def _map_invert_alarm_sig(to_msg, sig_val, to_msgs):
+    ''' returns a mutate to_msgs which contains a mapped boolean alarm value
+        that is inverted. boolean hi = no alarm, boolean lo = alarm.
+    '''
+    for msg_name, sig_names in to_msg.items():
+        for sig_name in sig_names:
+            m = alarm_re.match(sig_name)
+            if m:
+                log.debug(m.group(1))
+                if m.group(1) == "ARRIVE":
+                    to_msgs= _write_sig_val(
+                            msg_name,
+                            sig_name,
+                            not sig_val,
+                            to_msgs,
+                    )
+                elif m.group(1) == "LEAVE":
+                    to_msgs = _write_sig_val(
+                            msg_name,
+                            sig_name,
+                            sig_val, # flip the bit, leave == !arrive
+                            to_msgs,
+                    )
+                else:
+                        log.warning("unable to match alarm signal: {}".format(sig_name))
+
+        return to_msgs
+        
+
+def _map_default_sig(to_msg, sig_value, to_msgs):
+    ''' returns a mutated translated_msgs which contains the message and signal value
+    ''' 
+
+    for msg_name, sig_names in to_msg.items():
+        for sig_name in sig_names:
+            to_msgs =_write_sig_val(
+                    msg_name,
+                    sig_name,
+                    sig_value,
+                    to_msgs,
+            )
+
+    return to_msgs
+
+def _write_sig_val(msg_name, sig_name, sig_value, to_msgs):
+    ''' returns a mutated translated_msgs which contains an updated msg
+        with the signal value
+    '''
+
+    existing_msg = to_msgs.get(msg_name, None)
+    if existing_msg:
+        to_msgs[msg_name][sig_name] = sig_value
+    else:
+        to_msgs[msg_name] = {sig_name: sig_value}
+
+    return to_msgs 
+
+class Map:
+    def __init__(self, msg, tfunc):
+        self._msg = msg
+        self._tfunc = tfunc  # function that knows how to decode the mapping
+
+    def msg(self):
+        return self._msg
+
+    def transfer_function(self, sig_val, to_msgs):
+        return self._tfunc(self._msg, sig_val, to_msgs)
+
+BMS_TO_SMA = { 
     "IO_STACK_V": {
-        "IO_STACK_V": { 
-            "IO_STATUS": "IO_STATUS_V"
-        },
+        "IO_STACK_V":  
+            Map({"IO_STATUS": {"IO_STATUS_V"}}, _map_default_sig) 
     },
     "IO_STACK_I": {
-        "IO_STACK_I": {
-            "IO_STATUS": "IO_STATUS_I"
-        },
+        "IO_STACK_I": 
+            Map({"IO_STATUS": {"IO_STATUS_I"}}, _map_default_sig)
     },
     "IO_SOC": {
-        "IO_SOC": {
-            "IO_STATE": { "IO_STATE_SOC", "IO_STATE_SOC_HIRES" }
-        },
+        "IO_SOC": 
+            Map({"IO_STATE": {"IO_STATE_SOC", "IO_STATE_SOC_HIRES"}}, _map_default_sig)
     },
     "IO_DOD": {
         "IO_DOD": {
@@ -52,13 +178,12 @@ BMS = {
     },
     "IO_AVG_CELL_TEMP": {
         "IO_AVG_CELL_TEMP": {
-            "IO_STATUS": "IO_STATUS_TEMP"
+            "IO_STATUS": { "IO_STATUS_TEMP" }
         },
     },
     "IO_OVERALL_SAFE": {
-        "IO_OVERALL_SAFE": {
-            "IO_ALARM": { "IO_ALARM_GENERAL_ARRIVE", "IO_ALARM_GENERAL_LEAVE" } 
-        },
+        "IO_OVERALL_SAFE":
+            Map({"IO_ALARM": {"IO_ALARM_GENERAL_ARRIVE", "IO_ALARM_GENERAL_LEAVE"}}, _map_invert_alarm_sig)
     },
     "IO_SAFE_TO_CHRG": {
         "IO_SAFE_TO_CHRG": {
@@ -71,9 +196,8 @@ BMS = {
         },
     },
     "IO_CHRG_I_LIM": {
-        "IO_CHRG_I_LIM": {
-            "IO_CTRL": "IO_CTRL_BATT_CHRG_I_LIM" 
-        },
+        "IO_CHRG_I_LIM":
+            Map({"IO_CTRL": { "IO_CTRL_BATT_CHRG_I_LIM" }}, _map_default_sig)
     },
     "IO_CHRG_PCT_LIM": {
         "IO_CHRG_PCT_LIM": {
@@ -81,9 +205,8 @@ BMS = {
         },
     },
     "IO_DISCHRG_I_LIM": {
-        "IO_DISCHRG_I_LIM": {
-            "IO_CTRL": "IO_CTRL_BATT_DISCHRG_I_LIM" 
-        },
+        "IO_DISCHRG_I_LIM":
+            Map({"IO_CTRL": { "IO_CTRL_BATT_DISCHRG_I_LIM" }}, _map_default_sig)
     },
     "IO_DISCHRG_PCT_LIM": {
         "IO_DISCHRG_PCT_LIM": {
@@ -101,14 +224,12 @@ BMS = {
         },
     },
     "IO_FAULT_STACK_HI_V": {
-        "IO_FAULT_STACK_HI_V": {
-            "IO_ALARM" : { "IO_ALARM_HI_V_ARRIVE", "IO_ALARM_HI_V_LEAVE" }
-        },
+        "IO_FAULT_STACK_HI_V":
+            Map({"IO_ALARM" : { "IO_ALARM_HI_V_ARRIVE", "IO_ALARM_HI_V_LEAVE" }}, _map_alarm_sig)
     },
     "IO_FAULT_STACK_LO_V": {
-        "IO_FAULT_STACK_LO_V": {
-            "IO_ALARM" : { "IO_ALARM_LO_V_ARRIVE", "IO_ALARM_LO_V_LEAVE" }
-        },
+        "IO_FAULT_STACK_LO_V":
+            Map({"IO_ALARM" : { "IO_ALARM_LO_V_ARRIVE", "IO_ALARM_LO_V_LEAVE" }}, _map_alarm_sig)
     },
     "IO_FAULT_TEMP_HI": {
         "IO_FAULT_TEMP_HI": {
@@ -151,57 +272,13 @@ BMS = {
         },
     },
     "IO_CHRG_V": {
-        "IO_CHRG_V": {
-            "IO_CTRL": "IO_CTRL_BATT_CHRG_V"
-        },
+        "IO_CHRG_V":
+            Map({"IO_CTRL": { "IO_CTRL_BATT_CHRG_V" }}, _map_default_sig)
     },
     "IO_DISCHRG_V": {
-        "IO_DISCHRG_V": {
-            "IO_CTRL": "IO_CTRL_BATT_DISCHRG_V"
-        },
+        "IO_DISCHRG_V":
+            Map({"IO_CTRL": { "IO_CTRL_BATT_DISCHRG_V" }}, _map_default_sig)
     },
     
 }
 
-class Translator(object):
-    def __init__(self):
-        self.bms_to_inv = BMS
-
-    def translate(self, msg):
-        translated_msgs = {}
-        for msg_name, signals in msg.items():
-            for signal_name, signal_value in signals.items():
-                 msg_map = self.bms_to_inv[msg_name][signal_name]
-                 translated_msgs = self._map_signal(msg_map, signal_value, translated_msgs)
-
-        return translated_msgs
-
-    def _map_signal(self, msg_map, signal_value, translated_msgs):
-        for t_msg_name, t_signal_names in msg_map.items():
-            # If t_signal_name is not a set, then we need to prevent
-            # python from iterating over the string as chars.
-            if isinstance(t_signal_names, str):
-                translated_msgs = self._update_translated_msgs(
-                    t_msg_name,
-                    t_signal_names,
-                    signal_value,
-                    translated_msgs,
-                )
-            else:
-                for t_signal_name in t_signal_names:
-                    translated_msgs = self._update_translated_msgs(
-                        t_msg_name,
-                        t_signal_name,
-                        signal_value,
-                        translated_msgs,
-                    )
-
-        return translated_msgs
-
-    def _update_translated_msgs(self, t_msg_name, t_signal_name, signal_value, translated_msgs):
-        existing_signal = translated_msgs.get(t_msg_name, None)
-        if existing_signal:
-            translated_msgs[t_msg_name][t_signal_name] = signal_value
-        else:
-            translated_msgs[t_msg_name] = {t_signal_name: signal_value}
-        return translated_msgs 

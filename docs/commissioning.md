@@ -83,18 +83,18 @@ Do this for both the SMA and Nuvation fix errors where found
 
 python gateway 
 
-## Commissioning of embedded unit
+# OS Scripts for final polished 
 
 other than making sure the CAN interfaces are brought up at boot. there are a few other tasks the OS should take care of.
 
-# auto start the script
+E# auto start the script
 using systemd:
 https://github.com/torfsen/python-systemd-tutorial 
 
-# push error.log to github
+## push error.log to github
 chronjob and commit script
 
-# limit size of error.log
+## limit size of error.log
 
 use RotatingFileHandler:
 https://stackoverflow.com/questions/24505145/how-to-limit-log-file-size-in-python
