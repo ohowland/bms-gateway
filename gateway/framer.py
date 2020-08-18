@@ -6,6 +6,8 @@ import logging
 import cantools
 import can
 
+from functools import reduce
+
 log = logging.getLogger('sys')
 
 class Framer(object):
@@ -17,12 +19,13 @@ class Framer(object):
     def db(self):
         return self._db
 
+    def defined_messages(self):
+        return [x.frame_id for x in self._db.messages]
+
 
     def decode_from_frame(self, msg):
         try:
-            print(msg)
             decoded_data = self.db.decode_message(msg.arbitration_id, msg.data, scaling=True) 
-            print(decoded_data)
             msg_name = self.db.get_message_by_frame_id(msg.arbitration_id).name
             return {msg_name: decoded_data}
         except KeyError as e:

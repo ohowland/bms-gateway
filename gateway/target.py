@@ -13,12 +13,20 @@ log = logging.getLogger('sys')
 
 class Target(object):
     def __init__(self, config, loop):
+
+        self._framer = framer.Framer(config)
+        can_filter_mask = int(config['can_mask'])
+
+        can_filters = [{"can_id": id, "can_mask": can_filter_mask, "extended": False} \
+                for id in self._framer.defined_messages()]
+
         self._bus = can.interface.Bus(
             config['channel'],
             bustype=config['interface'], 
             bitrate=config['baudrate'],
+            can_filters=can_filters
         )
-        self._framer = framer.Framer(config)
+
         self._status = dict()
         self._control = dict()
         self._reader = canreader.CANReader(config, self._bus, loop)

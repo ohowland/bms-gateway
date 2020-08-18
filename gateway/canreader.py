@@ -23,6 +23,7 @@ class CANReader(object):
 
     async def __anext__(self):
         msg = await self._listener.get_message()
+        log.debug(msg)
         if not msg:
            raise StopAsyncIteration
         else:
