@@ -108,3 +108,4 @@ venv.bak/
 /.vscode
 /config/boostrap.ini
 error.log
+*.swp

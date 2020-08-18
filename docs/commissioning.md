@@ -70,8 +70,31 @@ Do this for both the SMA and Nuvation fix errors where found
 
 # Install the Gateway
 
+`virtualenv -p python3 venv`
+`source venv/bin/activate`
+
+`pip install -r requirements.txt`
+
 ## Run integration test suite
+
+`nosetests --nocapture -l debug -v`
 
 ## Run Gateway
 
-python3 can
+python gateway 
+
+## Commissioning of embedded unit
+
+other than making sure the CAN interfaces are brought up at boot. there are a few other tasks the OS should take care of.
+
+# auto start the script
+using systemd:
+https://github.com/torfsen/python-systemd-tutorial 
+
+# push error.log to github
+chronjob and commit script
+
+# limit size of error.log
+
+use RotatingFileHandler:
+https://stackoverflow.com/questions/24505145/how-to-limit-log-file-size-in-python
