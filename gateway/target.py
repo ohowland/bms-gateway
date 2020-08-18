@@ -9,11 +9,12 @@ import framer
 import canreader
 import canwriter
 
-log = logging.getLogger('sys')
+log = logging.getLogger('target')
 
 class Target(object):
     def __init__(self, config, loop):
 
+        self._name = config['name']
         self._framer = framer.Framer(config)
         can_filter_mask = int(config['can_mask'])
 
@@ -34,12 +35,15 @@ class Target(object):
         self._write_buffer = list() 
 
     def __repr__(self):
-        return "Status: {}\nControl: {}\n"\
-                .format(self.status, self.control)
-                
+        return "Name: {}\nStatus: {}\nControl: {}\n"\
+                .format(self.name, self.status, self.control)
 
     def __del__(self):
         self.stop()
+
+    @property
+    def name(self):
+        return self._name
 
     @property
     def status(self):
@@ -51,16 +55,26 @@ class Target(object):
 
     def update_status(self, msg):
         self._status.update(msg)
+    
 
     def update_control(self, msg):
         ''' update control mutates the internal control state of the target
             object. this includes appending changed control messages to the
             write buffer.
         '''
-        self._control.update(msg)
+        for msg_name, signals in msg.items():
+            exists = self.control.get(msg_name, None)
+            if exists:
+                self._control[msg_name].update(signals)
+            else:
+                self._control.update({msg_name: signals})
+            
+            self._update_write_buffer(msg)
+
+    def _update_write_buffer(self, msg):
         for name in msg.keys():
             complete_data = self._control[name]
-            self._write_buffer.append({name, complete_data})
+            self._write_buffer.append({name: complete_data})
 
     async def read_canbus(self):
         ''' Returns a dictionary of structure {msg_name: {signal_name: value}}
@@ -81,8 +95,12 @@ class Target(object):
                 self._writer.publish(name, encoded)
 
     def get_write_buffer(self):
+        ''' Returns the write buffer, and clears the
+            internal buffer storage
+        '''
+
         write_buffer = self._write_buffer
-        self._write_buffer = list()
+        self._write_buffer = list() # Clear the buffer after read
         return write_buffer
 
     def stop(self):

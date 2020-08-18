@@ -2,15 +2,18 @@
 - [x] PeakCAN driver installation and testing
 - [x] CAN interface auto-up
 - [ ] Testing agenda for IE Facility:
-  1. [ ] Document process for checking CAN signal integrity
+  1. [x] Document process for checking CAN signal integrity
   2. [ ] Process for checking CAN messaging integrity (scale, addr, size)
 - [x] Document connector build
 
 # Core Code
-- [ ] Use filters on CANreader to reject unknown messages
-- [ ] Instrument software to log all the errors in debug mode
+- [x] Use filters on CANreader to reject unknown messages
+- [x] Instrument software to log all the errors in debug mode
 - [ ] Command line interface dump object data.
 - [x] Finish DBC for nuvation
+- [ ] Define method for translating nuvation alarms (bool) to SMA alarm (two bit)
+- [ ] Define method for writing static values to SMA
+- [ ] Read a charge V and discharge V from nuvation, report to SMA 
 
 # Testing hardware/code
 - [ ] Check unit test coverage

@@ -15,7 +15,7 @@ from target import Target
 from translator import Translator
 from configparser import ConfigParser
 
-log = logging.getLogger('inv')
+log = logging.getLogger('gateway')
 
 async def bms_target(target, queue):
     """ The bms_target loop continiously the bms canbus and enques information
@@ -29,7 +29,7 @@ async def bms_target(target, queue):
                 target.update_status(msg)
                 await queue.put(msg)
         except Exception as e:
-            log.warning(e)
+            log.warning('bms_target: {}'.format(e))
 
 async def translation_loop(t, in_queue, out_queue):
     """ the translation loop facilitates mapping of incoming data 
@@ -55,7 +55,7 @@ async def inv_target(target, queue):
             for msg in target.get_write_buffer():
                 target.write_canbus(msg)
         except Exception as e:
-            log.warning(e)
+            log.warning('inv_target: {}'.format(e))
 
 def main(*args, **kwargs):
     """ 

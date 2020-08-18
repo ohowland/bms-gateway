@@ -9,13 +9,13 @@ from pathlib import Path
 def main(*args, **kwargs):
     
     logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
 
     fh = logging.FileHandler('error.log')
     fh.setLevel(logging.WARNING)
 
     ch = logging.StreamHandler()
-    ch.setLevel(logging.INFO)
+    ch.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter('[%(asctime)s] %(name)s_%(levelname)s: %(message)s') 
     fh.setFormatter(formatter)
