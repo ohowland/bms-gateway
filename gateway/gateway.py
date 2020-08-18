@@ -23,10 +23,13 @@ async def bms_target(target, queue):
     """
 
     while True:
-        msg = await target.read_canbus()
-        if msg:
-            target.update_status(msg)
-            await queue.put(msg)
+        try:
+            msg = await target.read_canbus()
+            if msg:
+                target.update_status(msg)
+                await queue.put(msg)
+        except Exception as e:
+            log.warning(e)
 
 async def translation_loop(t, in_queue, out_queue):
     """ the translation loop facilitates mapping of incoming data 
@@ -43,13 +46,16 @@ async def inv_target(target, queue):
     """
 
     while True:
-        msg = await queue.get()
-        if msg:
-            log.debug(msg)
-            target.update_control(msg)
+        try:
+            msg = await queue.get()
+            if msg:
+                log.debug(msg)
+                target.update_control(msg)
         
-        for msg in target.get_write_buffer():
-            target.write_canbus(msg)
+            for msg in target.get_write_buffer():
+                target.write_canbus(msg)
+        except Exception as e:
+            log.warning(e)
 
 def main(*args, **kwargs):
     """ 

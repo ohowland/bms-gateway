@@ -107,3 +107,4 @@ venv.bak/
 /events
 /.vscode
 /config/boostrap.ini
+error.log
