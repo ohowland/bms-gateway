@@ -21,6 +21,7 @@ https://stackoverflow.com/questions/19880190/interactive-input-output-using-pyth
   2. [ ] Wait until all signal names are found in `self.control` before enabling can publishing 
 - [ ] Read a charge V and discharge V from nuvation, report to SMA. what registers are we mapping? these registers are in the dbc file after the nuvation alarms.
 - [x] limit error log size, see rotatinghandler
+- [ ] Verify behavior when None is return from Map
 
 # Testing hardware/code
 - [ ] Check unit test coverage

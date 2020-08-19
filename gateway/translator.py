@@ -23,9 +23,10 @@ class Translator(object):
         for msg_name, sigs in from_msg.items():
             for sig_name, sig_val in sigs.items():
                  to_msg = self._get_mapping(msg_name, sig_name)
-                 to_msgs = to_msg.transfer_function(
-                         sig_val = sig_val,
-                         to_msgs = to_msgs)
+                 if to_msg:
+                     to_msgs = to_msg.transfer_function(sig_val, to_msgs)
+                 else:
+                     log.debug("CAN message {}::{} is not mapped, consider removing from production dbc".format(msg_name, sig_name))
 
         return to_msgs
     
@@ -147,81 +148,68 @@ BMS_TO_SMA = {
             Map({"IO_STATE": {"IO_STATE_SOC", "IO_STATE_SOC_HIRES"}}, _map_default_sig)
     },
     "IO_DOD": {
-        "IO_DOD": {
+        "IO_DOD":
             None
-        },
     },
     "IO_MAX_CELL_V": {
-        "IO_MAX_CELL_V": {
+        "IO_MAX_CELL_V":
             None
-        },
     },
     "IO_MIN_CELL_V": {
-        "IO_MIN_CELL_V": {
+        "IO_MIN_CELL_V":
             None
-        },
     },
     "IO_AVG_CELL_V": {
-        "IO_AVG_CELL_V": {
+        "IO_AVG_CELL_V":
             None
-        },
     },
     "IO_MAX_CELL_TEMP": {
-        "IO_MAX_CELL_TEMP": {
+        "IO_MAX_CELL_TEMP":
             None
-        },
     },
     "IO_MIN_CELL_TEMP": {
-        "IO_MIN_CELL_TEMP": {
+        "IO_MIN_CELL_TEMP":
             None
-        },
     },
     "IO_AVG_CELL_TEMP": {
-        "IO_AVG_CELL_TEMP": {
-            "IO_STATUS": { "IO_STATUS_TEMP" }
-        },
+        "IO_AVG_CELL_TEMP":
+            Map({"IO_STATUS": { "IO_STATUS_TEMP" }}, _map_default_sig)
     },
     "IO_OVERALL_SAFE": {
         "IO_OVERALL_SAFE":
             Map({"IO_ALARM": {"IO_ALARM_GENERAL_ARRIVE", "IO_ALARM_GENERAL_LEAVE"}}, _map_invert_alarm_sig)
     },
     "IO_SAFE_TO_CHRG": {
-        "IO_SAFE_TO_CHRG": {
+        "IO_SAFE_TO_CHRG":
             None
-        },
     },
     "IO_SAFE_TO_DISCHRG": {
-        "IO_SAFE_TO_DISCHRG": {
+        "IO_SAFE_TO_DISCHRG":
             None
-        },
     },
     "IO_CHRG_I_LIM": {
         "IO_CHRG_I_LIM":
             Map({"IO_CTRL": { "IO_CTRL_BATT_CHRG_I_LIM" }}, _map_default_sig)
     },
     "IO_CHRG_PCT_LIM": {
-        "IO_CHRG_PCT_LIM": {
+        "IO_CHRG_PCT_LIM":
             None
-        },
     },
     "IO_DISCHRG_I_LIM": {
         "IO_DISCHRG_I_LIM":
             Map({"IO_CTRL": { "IO_CTRL_BATT_DISCHRG_I_LIM" }}, _map_default_sig)
     },
     "IO_DISCHRG_PCT_LIM": {
-        "IO_DISCHRG_PCT_LIM": {
+        "IO_DISCHRG_PCT_LIM":
             None
-        },
     },
     "IO_STACK_STATE": {
-        "IO_STACK_STATE": {
+        "IO_STACK_STATE":
             None
-        },
     },
     "IO_HEARTBEAT": {
-        "IO_HEARTBEAT": {
+        "IO_HEARTBEAT":
             None
-        },
     },
     "IO_FAULT_STACK_HI_V": {
         "IO_FAULT_STACK_HI_V":
@@ -232,44 +220,36 @@ BMS_TO_SMA = {
             Map({"IO_ALARM" : { "IO_ALARM_LO_V_ARRIVE", "IO_ALARM_LO_V_LEAVE" }}, _map_alarm_sig)
     },
     "IO_FAULT_TEMP_HI": {
-        "IO_FAULT_TEMP_HI": {
+        "IO_FAULT_TEMP_HI":
             None
-        },
     },
     "IO_FAULT_TEMP_LO": {
-        "IO_FAULT_TEMP_LO": {
+        "IO_FAULT_TEMP_LO":
             None
-        },
     },
     "IO_FAULT_CHRG_TEMP_HI": {
-        "IO_FAULT_CHRG_TEMP_HI": {
+        "IO_FAULT_CHRG_TEMP_HI":
             None
-        },
     },
     "IO_FAULT_CHRG_TEMP_LO": {
-        "IO_FAULT_CHRG_TEMP_LO": {
+        "IO_FAULT_CHRG_TEMP_LO":
             None
-        },
     },
     "IO_FAULT_STACK_HI_I": {
-        "IO_FAULT_STACK_HI_I": {
+        "IO_FAULT_STACK_HI_I":
             None
-        },
     },
     "IO_FAULT_STACK_LO_I": {
-        "IO_FAULT_STACK_LO_I": {
+        "IO_FAULT_STACK_LO_I":
             None
-        },
     },
     "IO_FAULT_CONTACTOR": {
-        "IO_FAULT_CONTACTOR": {
+        "IO_FAULT_CONTACTOR":
             None
-        },
     },
     "IO_FAULT_LINKBUS": {
-        "IO_FAULT_LINKBUS": {
+        "IO_FAULT_LINKBUS":
             None
-        },
     },
     "IO_CHRG_V": {
         "IO_CHRG_V":
