@@ -95,6 +95,10 @@ https://github.com/torfsen/python-systemd-tutorial
 chronjob and commit script
 
 ## limit size of error.log
-
 use RotatingFileHandler:
 https://stackoverflow.com/questions/24505145/how-to-limit-log-file-size-in-python
+
+## enable ssh server
+`sudo apt-get install openssh-server`  
+Allow traffic through the firewall:
+`sudo ufw allow ssh`

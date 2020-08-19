@@ -1,5 +1,5 @@
 import logging
-import argparse
+from logging.handlers import RotatingFileHandler
 
 import gateway
 
@@ -11,7 +11,7 @@ def main(*args, **kwargs):
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
-    fh = logging.FileHandler('error.log')
+    fh = logging.handlers.RotatingFileHandler('error.log', maxBytes=100000, backupCount=1)
     fh.setLevel(logging.WARNING)
 
     ch = logging.StreamHandler()

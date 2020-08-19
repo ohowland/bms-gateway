@@ -10,11 +10,17 @@
 # Core Code
 - [x] Use filters on CANreader to reject unknown messages
 - [x] Instrument software to log all the errors in debug mode
-- [ ] Command line interface dump object data.
+- [ ] Command line interface dump object data.  
+Referred to as a REPL, use the subprocess module and pipes, see SO post here:
+https://stackoverflow.com/questions/19880190/interactive-input-output-using-python [ ] Define method for writing static values to SMA
 - [x] Finish DBC for nuvation
-- [ ] Define method for translating nuvation alarms (bool) to SMA alarm (two bit)
-- [ ] Define method for writing static values to SMA
+- [x] Define method for translating nuvation alarms (bool) to SMA alarm (two bit)
+- [ ] Initialize writer before allowing publish to canbus
+  1. [ ] Initialize static values in `self._control` of the inverter (writer)
+  2. [ ] Initialize unused alarms (are there any unused alarms?) in the inverter (writer)
+  2. [ ] Wait until all signal names are found in `self.control` before enabling can publishing 
 - [ ] Read a charge V and discharge V from nuvation, report to SMA. what registers are we mapping? these registers are in the dbc file after the nuvation alarms.
+- [x] limit error log size, see rotatinghandler
 
 # Testing hardware/code
 - [ ] Check unit test coverage
@@ -29,6 +35,7 @@
 - [x] Network setup script
 - [ ] Script to download required packages
   - git, canutils, python3.6, pip3, virtualenv, gcc, build-essentials
+- [ ] Start SSH server
 
 # Hardware Build Setup
 - [ ] Build rj45-db9 connectors with termination
