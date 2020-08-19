@@ -18,8 +18,8 @@ class Target(object):
         self._framer = framer.Framer(config)
         can_filter_mask = int(config['can_mask'])
 
-        can_filters = [{"can_id": id, "can_mask": can_filter_mask, "extended": False} \
-                for id in self._framer.defined_messages()]
+        can_filters = [{"can_id": msg.frame_id, "can_mask": can_filter_mask, "extended": False} \
+                for msg in self._framer.defined_messages()]
 
         self._bus = can.interface.Bus(
             config['channel'],
@@ -33,6 +33,7 @@ class Target(object):
         self._reader = canreader.CANReader(config, self._bus, loop)
         self._writer = canwriter.CANWriter(config, self._bus)
         self._write_buffer = list() 
+        self._ready = False
 
     def __repr__(self):
         return "Name: {}\nStatus: {}\nControl: {}\n"\
@@ -102,6 +103,22 @@ class Target(object):
         write_buffer = self._write_buffer
         self._write_buffer = list() # Clear the buffer after read
         return write_buffer
+
+    def ready(self):
+        if self._ready:
+            return True
+        else:
+            signals_list = {y.name for x in self._framer.defined_messages() for y in x.signals}
+            signals_ready = {y for x in self._control.values() for y in x.keys()}
+            
+            signals_waiting = signals_list.difference(signals_ready)
+            if signals_waiting:
+                log.debug("waiting for signals to initialize: {}".format(signals_waiting))
+                return False
+            else:
+                self._ready = True
+                return True
+                log.debug("{} write control initialization complete".format(self.name))
 
     def stop(self):
         log.debug("Target shutting down")

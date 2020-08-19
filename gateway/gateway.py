@@ -18,8 +18,8 @@ from configparser import ConfigParser
 log = logging.getLogger('gateway')
 
 async def bms_target(target, queue):
-    """ The bms_target loop continiously the bms canbus and enques information
-        for the translation loop
+    """ the bms_target loop reads the bms CANbus and enques information
+        for the translation loop.
     """
 
     while True:
@@ -44,16 +44,17 @@ async def translation_loop(t, in_queue, out_queue):
 async def inv_target(target, queue):
     """ the inv_target loop continiously writes the inverter canbus
     """
-
+    
     while True:
         try:
             msg = await queue.get()
             if msg:
                 log.debug(msg)
                 target.update_control(msg)
-        
-            for msg in target.get_write_buffer():
-                target.write_canbus(msg)
+
+            if target.ready(): 
+                for msg in target.get_write_buffer():
+                    target.write_canbus(msg)
         except Exception as e:
             log.warning('inv_target: {}'.format(e))
 

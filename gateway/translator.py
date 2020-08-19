@@ -38,78 +38,6 @@ class Translator(object):
         return self._map[msg_name][sig_name]
 
 
-def _map_alarm_sig(to_msg, sig_val, to_msgs):
-    ''' returns a mutate to_msgs which contains a mapped boolean alarm value
-    '''
-
-    for msg_name, sig_names in to_msg.items():
-        for sig_name in sig_names:
-            m = alarm_re.match(sig_name)
-            if m:
-                log.debug(m.group(1))
-                if m.group(1) == "ARRIVE":
-                    to_msgs = _write_sig_val(
-                            msg_name,
-                            sig_name,
-                            sig_val,
-                            to_msgs,
-                    )
-                elif m.group(1) == "LEAVE":
-                    to_msgs = _write_sig_val(
-                            msg_name,
-                            sig_name,
-                            not sig_val, # flip the bit, leave == !arrive
-                            to_msgs,
-                    )
-                else:
-                        log.warning("unable to match alarm signal: {}".format(sig_name))
-
-        return to_msgs
-
-def _map_invert_alarm_sig(to_msg, sig_val, to_msgs):
-    ''' returns a mutate to_msgs which contains a mapped boolean alarm value
-        that is inverted. boolean hi = no alarm, boolean lo = alarm.
-    '''
-    for msg_name, sig_names in to_msg.items():
-        for sig_name in sig_names:
-            m = alarm_re.match(sig_name)
-            if m:
-                log.debug(m.group(1))
-                if m.group(1) == "ARRIVE":
-                    to_msgs= _write_sig_val(
-                            msg_name,
-                            sig_name,
-                            not sig_val,
-                            to_msgs,
-                    )
-                elif m.group(1) == "LEAVE":
-                    to_msgs = _write_sig_val(
-                            msg_name,
-                            sig_name,
-                            sig_val, # flip the bit, leave == !arrive
-                            to_msgs,
-                    )
-                else:
-                        log.warning("unable to match alarm signal: {}".format(sig_name))
-
-        return to_msgs
-        
-
-def _map_default_sig(to_msg, sig_value, to_msgs):
-    ''' returns a mutated translated_msgs which contains the message and signal value
-    ''' 
-
-    for msg_name, sig_names in to_msg.items():
-        for sig_name in sig_names:
-            to_msgs =_write_sig_val(
-                    msg_name,
-                    sig_name,
-                    sig_value,
-                    to_msgs,
-            )
-
-    return to_msgs
-
 def _write_sig_val(msg_name, sig_name, sig_value, to_msgs):
     ''' returns a mutated translated_msgs which contains an updated msg
         with the signal value
@@ -134,18 +62,88 @@ class Map:
     def transfer_function(self, sig_val, to_msgs):
         return self._tfunc(self._msg, sig_val, to_msgs)
 
+    def map_alarm_sig(to_msg, sig_val, to_msgs):
+        ''' returns a mutate to_msgs which contains a mapped boolean alarm value
+        '''
+
+        for msg_name, sig_names in to_msg.items():
+            for sig_name in sig_names:
+                m = alarm_re.match(sig_name)
+                if m:
+                    if m.group(1) == "ARRIVE":
+                        to_msgs = _write_sig_val(
+                                msg_name,
+                                sig_name,
+                                sig_val,
+                                to_msgs,
+                        )
+                elif m.group(1) == "LEAVE":
+                    to_msgs = _write_sig_val(
+                                msg_name,
+                                sig_name,
+                                not sig_val, # flip the bit, leave == !arrive
+                                to_msgs,
+                    )
+                else:
+                    log.warning("unable to match alarm signal: {}".format(sig_name))
+
+       return to_msgs
+
+    def map_invert_alarm_sig(to_msg, sig_val, to_msgs):
+        ''' returns a mutate to_msgs which contains a mapped boolean alarm value
+            that is inverted. boolean hi = no alarm, boolean lo = alarm.
+        '''
+        for msg_name, sig_names in to_msg.items():
+            for sig_name in sig_names:
+                m = alarm_re.match(sig_name)
+                if m:
+                    if m.group(1) == "ARRIVE":
+                        to_msgs= _write_sig_val(
+                                msg_name,
+                                sig_name,
+                                not sig_val, # flip the bit, leave == !arrive
+
+                                to_msgs,
+                        )
+                    elif m.group(1) == "LEAVE":
+                        to_msgs = _write_sig_val(
+                                msg_name,
+                                sig_name,
+                                sig_val,
+                                to_msgs,
+                        )
+                    else:
+                        log.warning("unable to match alarm signal: {}".format(sig_name))
+        return to_msgs
+        
+
+    def map_default_sig(to_msg, sig_value, to_msgs):
+        ''' returns a mutated translated_msgs which contains the message and signal value
+        ''' 
+
+        for msg_name, sig_names in to_msg.items():
+            for sig_name in sig_names:
+                to_msgs = _write_sig_val(
+                        msg_name,
+                        sig_name,
+                        sig_value,
+                        to_msgs,
+                )
+
+        return to_msgs
+
 BMS_TO_SMA = { 
     "IO_STACK_V": {
         "IO_STACK_V":  
-            Map({"IO_STATUS": {"IO_STATUS_V"}}, _map_default_sig) 
+            Map({"IO_STATUS": {"IO_STATUS_V"}}, Map.map_default_sig) 
     },
     "IO_STACK_I": {
         "IO_STACK_I": 
-            Map({"IO_STATUS": {"IO_STATUS_I"}}, _map_default_sig)
+            Map({"IO_STATUS": {"IO_STATUS_I"}}, Map.map_default_sig)
     },
     "IO_SOC": {
         "IO_SOC": 
-            Map({"IO_STATE": {"IO_STATE_SOC", "IO_STATE_SOC_HIRES"}}, _map_default_sig)
+            Map({"IO_STATE": {"IO_STATE_SOC", "IO_STATE_SOC_HIRES"}}, Map.map_default_sig)
     },
     "IO_DOD": {
         "IO_DOD":
@@ -173,11 +171,11 @@ BMS_TO_SMA = {
     },
     "IO_AVG_CELL_TEMP": {
         "IO_AVG_CELL_TEMP":
-            Map({"IO_STATUS": { "IO_STATUS_TEMP" }}, _map_default_sig)
+            Map({"IO_STATUS": {"IO_STATUS_TEMP"}}, Map.map_default_sig)
     },
     "IO_OVERALL_SAFE": {
         "IO_OVERALL_SAFE":
-            Map({"IO_ALARM": {"IO_ALARM_GENERAL_ARRIVE", "IO_ALARM_GENERAL_LEAVE"}}, _map_invert_alarm_sig)
+            Map({"IO_ALARM": {"IO_ALARM_GENERAL_ARRIVE", "IO_ALARM_GENERAL_LEAVE"}"IO_WARN": { "IO_WARN_GENERAL_ARRIVE", "IO_WARN_GENERAL_LEAVE"}}, Map.map_invert_alarm_sig)
     },
     "IO_SAFE_TO_CHRG": {
         "IO_SAFE_TO_CHRG":
@@ -189,7 +187,7 @@ BMS_TO_SMA = {
     },
     "IO_CHRG_I_LIM": {
         "IO_CHRG_I_LIM":
-            Map({"IO_CTRL": { "IO_CTRL_BATT_CHRG_I_LIM" }}, _map_default_sig)
+            Map({"IO_CTRL": {"IO_CTRL_BATT_CHRG_I_LIM"}}, Map.map_default_sig)
     },
     "IO_CHRG_PCT_LIM": {
         "IO_CHRG_PCT_LIM":
@@ -197,7 +195,7 @@ BMS_TO_SMA = {
     },
     "IO_DISCHRG_I_LIM": {
         "IO_DISCHRG_I_LIM":
-            Map({"IO_CTRL": { "IO_CTRL_BATT_DISCHRG_I_LIM" }}, _map_default_sig)
+            Map({"IO_CTRL": {"IO_CTRL_BATT_DISCHRG_I_LIM"}}, Map.map_default_sig)
     },
     "IO_DISCHRG_PCT_LIM": {
         "IO_DISCHRG_PCT_LIM":
@@ -213,51 +211,51 @@ BMS_TO_SMA = {
     },
     "IO_FAULT_STACK_HI_V": {
         "IO_FAULT_STACK_HI_V":
-            Map({"IO_ALARM" : { "IO_ALARM_HI_V_ARRIVE", "IO_ALARM_HI_V_LEAVE" }}, _map_alarm_sig)
+        Map({"IO_ALARM" : {"IO_ALARM_HI_V_ARRIVE", "IO_ALARM_HI_V_LEAVE"}, "IO_WARN": {"IO_ALARM_HI_V_ARRIVE", "IO_ALARM_HI_V_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_STACK_LO_V": {
         "IO_FAULT_STACK_LO_V":
-            Map({"IO_ALARM" : { "IO_ALARM_LO_V_ARRIVE", "IO_ALARM_LO_V_LEAVE" }}, _map_alarm_sig)
+            Map({"IO_ALARM" : {"IO_ALARM_LO_V_ARRIVE", "IO_ALARM_LO_V_LEAVE"} "IO_WARN" : {"IO_WARN_LO_V_ARRIVE", "IO_WARN_LO_V_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_TEMP_HI": {
         "IO_FAULT_TEMP_HI":
-            None
+            Map({"IO_ALARM" : {"IO_ALARM_HI_TEMP_ARRIVE", "IO_ALARM_HI_TEMP_LEAVE"} "IO_WARN" : {"IO_WARN_HI_TEMP_ARRIVE", "IO_WARN_HI_TEMP_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_TEMP_LO": {
         "IO_FAULT_TEMP_LO":
-            None
+            Map({"IO_ALARM" : {"IO_ALARM_LO_TEMP_ARRIVE", "IO_ALARM_LO_TEMP_LEAVE"} "IO_WARN" : {"IO_WARN_LO_TEMP_ARRIVE", "IO_WARN_LO_TEMP_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_CHRG_TEMP_HI": {
         "IO_FAULT_CHRG_TEMP_HI":
-            None
+            Map({"IO_ALARM" : {"IO_ALARM_HI_TEMP_CHRG_ARRIVE", "IO_ALARM_HI_TEMP_CHRG_LEAVE"} "IO_WARN" : {"IO_WARN_HI_TEMP_CHRG_ARRIVE", "IO_WARN_HI_TEMP_CHRG_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_CHRG_TEMP_LO": {
         "IO_FAULT_CHRG_TEMP_LO":
-            None
+            Map({"IO_ALARM" : {"IO_ALARM_LO_TEMP_CHRG_ARRIVE", "IO_ALARM_LO_TEMP_CHRG_LEAVE"} "IO_WARN" : {"IO_WARN_LO_TEMP_CHRG_ARRIVE", "IO_WARN_LO_TEMP_CHRG_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_STACK_HI_I": {
         "IO_FAULT_STACK_HI_I":
-            None
+            Map({"IO_ALARM" : {"IO_ALARM_HI_I_ARRIVE", "IO_ALARM_HI_I_LEAVE"} "IO_WARN" : {"IO_WARN_HI_I_ARRIVE", "IO_WARN_HI_I_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_STACK_LO_I": {
         "IO_FAULT_STACK_LO_I":
-            None
+            Map({"IO_ALARM" : {"IO_ALARM_HI_I_CHRG_ARRIVE", "IO_ALARM_HI_I_CHRG_LEAVE"} "IO_WARN" : {"IO_WARN_HI_I_CHRG_ARRIVE", "IO_WARN_HI_I_CHRG_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_CONTACTOR": {
         "IO_FAULT_CONTACTOR":
-            None
+            Map({"IO_ALARM" : {"IO_ALARM_CONTACTOR_ARRIVE", "IO_ALARM_CONTACTOR_LEAVE"} "IO_WARN" : {"IO_WARN_CONTACTOR_ARRIVE", "IO_WARN_CONTACTOR_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_LINKBUS": {
         "IO_FAULT_LINKBUS":
-            None
+            Map({"IO_ALARM" : {"IO_ALARM_BMS_ARRIVE", "IO_ALARM_BMS_LEAVE"} "IO_WARN" : {"IO_WARN_BMS_ARRIVE", "IO_WARN_BMS_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_CHRG_V": {
         "IO_CHRG_V":
-            Map({"IO_CTRL": { "IO_CTRL_BATT_CHRG_V" }}, _map_default_sig)
+            Map({"IO_CTRL": { "IO_CTRL_BATT_CHRG_V" }}, Map.map_default_sig)
     },
     "IO_DISCHRG_V": {
         "IO_DISCHRG_V":
-            Map({"IO_CTRL": { "IO_CTRL_BATT_DISCHRG_V" }}, _map_default_sig)
+            Map({"IO_CTRL": { "IO_CTRL_BATT_DISCHRG_V" }}, Map.map_default_sig)
     },
     
 }

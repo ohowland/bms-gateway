@@ -56,6 +56,12 @@ class TestTarget(unittest.TestCase):
         self.loop.create_task(inv_target(inv, queue))
         self.loop.create_task(bms_target(bms, queue))
 
+    def test_ready(self):
+        inv = target.Target(self.config['INV_COMM'], self.loop)
+        
+        self.assertTrue(inv.ready())
+        
+
 async def bms_target(target, queue):
     test_name = 'IO_STATE'
     test_data = {

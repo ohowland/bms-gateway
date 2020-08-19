@@ -83,13 +83,12 @@ Do this for both the SMA and Nuvation fix errors where found
 
 python gateway 
 
-# OS Scripts for final polished 
+# OS Scripts/Services/Routines 
 
 other than making sure the CAN interfaces are brought up at boot. there are a few other tasks the OS should take care of.
 
 ## auto start the script
-using systemd:
-https://github.com/torfsen/python-systemd-tutorial 
+this is done using systemd:
 
 use the unit file `/setup/gateway.service`  
 this file can be placed any number of locations, one that works is: `~/.config/systemd/user/`  
@@ -97,9 +96,6 @@ reload the systemd daemon to pickup the new service `systemctl --user daemon-rel
 start the service with `systemctl --user start gateway.service`  
 check status with `systemctl --user status gateway.service`  
 follow status with `journalctl --user-unit gateway.service -f`  
-
-## push error.log to github
-chronjob and commit script
 
 ## enable ssh server
 `sudo apt-get install openssh-server`  

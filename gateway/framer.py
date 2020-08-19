@@ -20,7 +20,7 @@ class Framer(object):
         return self._db
 
     def defined_messages(self):
-        return [x.frame_id for x in self._db.messages]
+        return self._db.messages
 
 
     def decode_from_frame(self, msg):
