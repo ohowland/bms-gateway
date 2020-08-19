@@ -29,6 +29,7 @@ def main(*args, **kwargs):
     logger.info('-----------------------')
 
     bootstrap_path = Path.cwd()
+    logger.info(bootstrap_path)
     while bootstrap_path.parent.stem == 'bms-gateway':
         bootstrap_path = bootstrap_path.parent
     bootstrap_path = bootstrap_path.joinpath('config', 'bootstrap.ini')

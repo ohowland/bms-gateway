@@ -31,12 +31,13 @@ https://stackoverflow.com/questions/19880190/interactive-input-output-using-pyth
 - [ ] Test PCANPCI from second system using PCANUSB
 
 # System Scripts
-- [ ] Write chronjob scripts for pushing errors to github 
-- [ ] Write scripts for auto boot
+- [-] Write chronjob scripts for pushing errors to github - **NOT DOING**
+- [x] Write scripts for auto boot. running as systemd
 - [x] Network setup script
 - [ ] Script to download required packages
   - git, canutils, python3.6, pip3, virtualenv, gcc, build-essentials
 - [ ] Start SSH server
+- [ ]
 
 # Hardware Build Setup
 - [ ] Build rj45-db9 connectors with termination
