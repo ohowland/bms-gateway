@@ -4,12 +4,15 @@
 """
 
 import logging
-import can
-import cantools
 
-log = logging.getLogger('sys')
+LOGGER = logging.getLogger('sys')
 
-class CANWriter(object):       
+class CANWriter:
+    ''' CANWriter controls the publishing of periodic messages on the
+        CANbus resource
+    '''
+
+
     def __init__(self, config, bus):
         self._bus = bus
         self._update_rate = float(config['update_rate'])
@@ -19,7 +22,7 @@ class CANWriter(object):
         self.stop()
 
     def publish(self, name, msg):
-        ''' iterate messages, check if a task is to be created or modified 
+        ''' iterate messages, check if a task is to be created or modified
         '''
         task = self._tasks.get(name, None)
         if task:
@@ -29,11 +32,13 @@ class CANWriter(object):
             self._tasks.update({name: task})
 
     def stop(self):
-        log.debug("canwriter stoppping")
+        ''' stop shuts down all tasks (send_periodic) spawned by the
+            CANWriter
+        '''
+
+        LOGGER.debug("canwriter stoppping")
         for task in self._tasks.values():
             try:
                 task.stop()
-            except Exception as e:
-                log.warning(e)
-                
-
+            except Exception as error:
+                LOGGER.warning(error)

@@ -2,7 +2,7 @@
     Author: Howl & Edgerton, llc 2019
     About: Helper functions for configuration
 """
-import logging
+#import logging
 
 from pathlib import Path
 

@@ -10,7 +10,7 @@ from functools import reduce
 
 log = logging.getLogger('framer')
 
-class Framer(object):
+class Framer:
 
     def __init__(self, config):
         self._db = cantools.database.load_file(config['dbc_filepath'])

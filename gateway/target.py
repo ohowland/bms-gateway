@@ -11,7 +11,7 @@ import canwriter
 
 log = logging.getLogger('target')
 
-class Target(object):
+class Target:
     def __init__(self, config, loop):
 
         self._name = config['name']

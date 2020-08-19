@@ -7,26 +7,23 @@ from configparser import ConfigParser
 from pathlib import Path
 
 def main(*args, **kwargs):
-    
+
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
+    file_handler = logging.handlers.RotatingFileHandler('error.log', maxBytes=100000, backupCount=1)
+    file_handler.setLevel(logging.WARNING)
 
-    fh = logging.handlers.RotatingFileHandler('error.log', maxBytes=100000, backupCount=1)
-    fh.setLevel(logging.WARNING)
-
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter('[%(asctime)s] %(name)s_%(levelname)s: %(message)s') 
-    fh.setFormatter(formatter)
-    ch.setFormatter(formatter)
+    file_handler.setFormatter(formatter)
+    stream_handler.setFormatter(formatter)
 
-    logger.addHandler(fh)
-    logger.addHandler(ch)
+    logger.addHandler(file_handler)
+    logger.addHandler(stream_handler)
 
-    logger.info('-----------------------')
     logger.info('Booting Nuvation-SMA Gateway v0.1')
-    logger.info('-----------------------')
 
     bootstrap_path = Path.cwd()
     logger.info(bootstrap_path)
@@ -39,9 +36,7 @@ def main(*args, **kwargs):
 
     gateway.main(bootstrap=bootstrap_parser)
 
-    print('-----------------------')
-    print('Shutdown Complete')
-    print('-----------------------')
+    logger.info('Shutdown Complete')
 
 if __name__ == '__main__':
     main()

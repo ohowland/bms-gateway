@@ -10,7 +10,7 @@ import cantools
 
 log = logging.getLogger('can_reader')
 
-class CANReader(object):       
+class CANReader:       
     def __init__(self, config, bus, loop):
         self._listener = can.AsyncBufferedReader()
         self._notifier = can.Notifier(bus, [self._listener], loop=loop) 
