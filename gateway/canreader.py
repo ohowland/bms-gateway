@@ -1,6 +1,7 @@
-""" Name: can_reader.py
-    Author: Howl & Edgerton, llc 2020
-    About:
+""" Copywrite: Howl & Edgerton, LLC 8/21/2020
+    Author: Owen Edgerton
+    Name: can_reader.py
+    Description: 
 """
 
 import logging
