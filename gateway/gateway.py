@@ -41,6 +41,24 @@ async def inv_target(target, queue):
     """ the inv_target loop continiously writes the inverter canbus
     """
 
+    static = {
+        "IO_STATE": {
+            "IO_STATE_SOH": 100
+        },
+        "IO_ALARM": {
+            "IO_ALARM_SHORT_ARRIVE": 0,
+            "IO_ALARM_SHORT_LEAVE": 0,
+            "IO_WARN_SHORT_ARRIVE": 0,
+            "IO_WARN_SHORT_LEAVE": 0,
+            "IO_ALARM_CELL_IMBAL_ARRIVE": 0,
+            "IO_ALARM_CELL_IMBAL_LEAVE": 0,
+            "IO_WARN_CELL_IMBAL_ARRIVE": 0,
+            "IO_WARN_CELL_IMBAL_LEAVE": 0,
+        },
+    }
+    
+    target._update_control(static)
+
     while True:
         try:
             msg = await queue.get()

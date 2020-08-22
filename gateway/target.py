@@ -33,8 +33,7 @@ class Target:
         self._reader = canreader.CANReader(config, self._bus, loop)
         self._writer = canwriter.CANWriter(config, self._bus)
         self._write_buffer = list() 
-
-        self._whitelist = 
+        
         self._ready = False
 
     def __repr__(self):
