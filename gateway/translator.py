@@ -43,20 +43,6 @@ class Translator:
 
         return self._map[msg_name][sig_name]
 
-
-def _write_sig_val(msg_name, sig_name, sig_value, to_msgs):
-    ''' returns a mutated translated_msgs which contains an updated msg
-        with the signal value
-    '''
-
-    existing_msg = to_msgs.get(msg_name, None)
-    if existing_msg:
-        to_msgs[msg_name][sig_name] = sig_value
-    else:
-        to_msgs[msg_name] = {sig_name: sig_value}
-
-    return to_msgs
-
 class Map:
     def __init__(self, msg, tfunc):
         self._msg = msg
@@ -77,14 +63,14 @@ class Map:
                 match = alarm_re.match(sig_name)
                 if match:
                     if match.group(1) == "ARRIVE":
-                        to_msgs = _write_sig_val(
+                        to_msgs = Map._write_sig_val(
                             msg_name,
                             sig_name,
                             sig_val,
                             to_msgs,
                         )
                     elif match.group(1) == "LEAVE":
-                        to_msgs = _write_sig_val(
+                        to_msgs = Map._write_sig_val(
                             msg_name,
                             sig_name,
                             not sig_val, # flip the bit, leave == !arrive
@@ -103,14 +89,14 @@ class Map:
                 match = alarm_re.match(sig_name)
                 if match:
                     if match.group(1) == "ARRIVE":
-                        to_msgs = _write_sig_val(
+                        to_msgs = Map._write_sig_val(
                             msg_name,
                             sig_name,
                             not sig_val, # flip the bit, leave == !arrive
                             to_msgs,
                         )
                     elif match.group(1) == "LEAVE":
-                        to_msgs = _write_sig_val(
+                        to_msgs = Map._write_sig_val(
                             msg_name,
                             sig_name,
                             sig_val,
@@ -126,12 +112,27 @@ class Map:
 
         for msg_name, sig_names in self._msg.items():
             for sig_name in sig_names:
-                to_msgs = _write_sig_val(
+                to_msgs = Map._write_sig_val(
                     msg_name,
                     sig_name,
                     sig_value,
                     to_msgs,
                 )
+
+        return to_msgs
+
+    
+    @staticmethod
+    def _write_sig_val(msg_name, sig_name, sig_value, to_msgs):
+        ''' returns a mutated translated_msgs which contains an updated msg
+            with the signal value
+        '''
+
+        existing_msg = to_msgs.get(msg_name, None)
+        if existing_msg:
+            to_msgs[msg_name][sig_name] = sig_value
+        else:
+            to_msgs[msg_name] = {sig_name: sig_value}
 
         return to_msgs
 

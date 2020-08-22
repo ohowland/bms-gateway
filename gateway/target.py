@@ -9,7 +9,7 @@ import framer
 import canreader
 import canwriter
 
-log = logging.getLogger('target')
+LOGGER = logging.getLogger('target')
 
 class Target:
     def __init__(self, config, loop):
@@ -33,6 +33,8 @@ class Target:
         self._reader = canreader.CANReader(config, self._bus, loop)
         self._writer = canwriter.CANWriter(config, self._bus)
         self._write_buffer = list() 
+
+        self._whitelist = 
         self._ready = False
 
     def __repr__(self):
@@ -113,15 +115,15 @@ class Target:
             
             signals_waiting = signals_list.difference(signals_ready)
             if signals_waiting:
-                log.debug("waiting for signals to initialize: {}".format(signals_waiting))
+                LOGGER.debug("waiting for signals to initialize: {}".format(signals_waiting))
                 return False
             else:
                 self._ready = True
+                LOGGER.debug("{} write control initialization complete".format(self.name))
                 return True
-                log.debug("{} write control initialization complete".format(self.name))
 
     def stop(self):
-        log.debug("Target shutting down")
+        LOGGER.debug("Target shutting down")
         '''
         try:
             self._reader.stop()
@@ -137,4 +139,4 @@ class Target:
         try:
             self._bus.shutdown()
         except Exception as e:
-            log.warning(e)
+            LOGGER.warning(e)
