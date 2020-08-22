@@ -41,6 +41,9 @@ async def inv_target(target, queue):
     """ the inv_target loop continiously writes the inverter canbus
     """
 
+    """ These values do not have a corresponding Nuvation BMS register.
+        They are initialized to zero at the start of this loop.
+    """
     static = {
         "IO_STATE": {
             "IO_STATE_SOH": 100
@@ -56,8 +59,7 @@ async def inv_target(target, queue):
             "IO_WARN_CELL_IMBAL_LEAVE": 0,
         },
     }
-    
-    target._update_control(static)
+    target.update_control(static)
 
     while True:
         try:
