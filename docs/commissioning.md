@@ -89,12 +89,14 @@ other than making sure the CAN interfaces are brought up at boot. there are a fe
 ## auto start the script
 this is done using systemd:
 
-use the unit file `/setup/gateway.service`  
-this file can be placed any number of locations, one that works is: `~/.config/systemd/user/`  
-reload the systemd daemon to pickup the new service `systemctl --user daemon-reload`  
-start the service with `systemctl --user start gateway.service`  
-check status with `systemctl --user status gateway.service`  
-follow status with `journalctl --user-unit gateway.service -f`  
+use the unit file `/setup/gateway.service` 
+this file can be placed any number of locations, one that works is: `~/.config/systemd/user/`, though for this project we will make it
+part of the system and locate it at `/etc/systemd/system/`  
+enable the unit with `systemctl enable gateway.service`
+reload the systemd daemon to pickup the new service `systemctl daemon-reload`  
+start the service with `systemctl start gateway.service`  
+check status with `systemctl status gateway.service`  
+follow status with `journalctl --unit gateway.service -f`  
 
 ## enable ssh server
 `sudo apt-get install openssh-server`  

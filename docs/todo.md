@@ -15,36 +15,41 @@ Referred to as a REPL, use the subprocess module and pipes, see SO post here:
 https://stackoverflow.com/questions/19880190/interactive-input-output-using-python [ ] Define method for writing static values to SMA
 - [x] Finish DBC for nuvation
 - [x] Define method for translating nuvation alarms (bool) to SMA alarm (two bit)
-- [ ] Initialize writer before allowing publish to canbus
-  1. [ ] Initialize static values in `self._control` of the inverter (writer)
-  2. [ ] Initialize unused alarms (are there any unused alarms?) in the inverter (writer)
+- [x] Initialize writer before allowing publish to canbus
+  1. [x] Initialize static values in `self._control` of the inverter (writer)
+  2. [x] Initialize unused alarms (are there any unused alarms?) in the inverter (writer)
   2. [x] Wait until all signal names are found in `self.control` before enabling can publishing 
 - [x] Read a charge V and discharge V from nuvation, report to SMA. what registers are we mapping? these registers are in the dbc file after the nuvation alarms.
 - [x] limit error log size, see rotatinghandler
 - [ ] Verify behavior when None is return from Map
+- [ ] use pylint to clean up code.
+- [ ] define error paths in software, what errors should cause the system to crash/restart? what should be handled internally?
 
 # Testing hardware/code
 - [ ] Check unit test coverage
 - [x] Complete basic unittests for each module
 - [ ] Write integration tests
-- [ ] Write test for PCANPCI
-- [ ] Test PCANPCI from second system using PCANUSB
+- [ ] Test error handling
+  1. [ ] loss of connection
+  2. [ ] out of range id recieved
+  3. [ ] what happens when a read, write, or translate loop crashes? I think the service should exit and allow systemd to restart it.
+this should only happen on an unexpected error.
 
 # System Scripts
 - [x] Write chronjob scripts for pushing errors to github **IGNORED**
 - [x] Write scripts for auto boot. running as systemd
 - [x] Network setup script
-- [ ] Script to download required packages
-  - git, canutils, python3.6, pip3, virtualenv, gcc, build-essentials, openssh-server
+- [x] Script to download required packages
+  - canutils, virtualenv, openssh-server
 - [x] Start SSH server. this will automatically come up with openssh-server, remember to let through firewall.
 
 # Hardware Build Setup
 - [ ] Build rj45-db9 connectors with termination
-- [ ] Install mPCIe CAN cards
+- [x] Install mPCIe CAN cards
 
 # Gateway configraution
-- [ ] SSH access from ethernet interface
-- [ ] Install and test PCAN drivers on embedded PC
+- [x] SSH access from ethernet interface
+- [x] Install and test PCAN drivers on embedded PC
 
 # Component Ordering
 - [x] 2x LogicSupply PCs
