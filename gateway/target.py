@@ -70,8 +70,8 @@ class Target:
                 self._control[msg_name].update(signals)
             else:
                 self._control.update({msg_name: signals})
-            
-            self._update_write_buffer(msg)
+        
+        self._update_write_buffer(msg)
 
     def _update_write_buffer(self, msg):
         for name in msg.keys():
