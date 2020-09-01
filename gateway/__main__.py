@@ -9,7 +9,7 @@ from pathlib import Path
 def main(*args, **kwargs):
 
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.WARNING)
     file_handler = logging.handlers.RotatingFileHandler('error.log', maxBytes=100000, backupCount=1)
     file_handler.setLevel(logging.WARNING)
 

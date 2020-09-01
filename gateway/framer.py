@@ -39,6 +39,7 @@ class Framer:
             template = self.db.get_message_by_name(name)
         except Exception as e:
             log.warning(e)
+            return None
 
         try:
             encoded_data = self.db.encode_message(template.frame_id, data, scaling=True)
@@ -51,5 +52,4 @@ class Framer:
 
         except Exception as e:
             log.warning(e)
-
             return None
