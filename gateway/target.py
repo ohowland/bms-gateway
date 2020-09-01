@@ -3,6 +3,7 @@
     About: targets for canbus
 """
 import logging
+import time
 import can
 
 import framer
@@ -139,3 +140,4 @@ class Target:
             self._bus.shutdown()
         except Exception as e:
             LOGGER.warning(e)
+

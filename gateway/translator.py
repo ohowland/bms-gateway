@@ -48,17 +48,19 @@ class Map:
         self._msg = msg
         self._tfunc = tfunc  # function that knows how to decode the mapping
 
+    @property
     def msg(self):
         return self._msg
 
     def transfer_function(self, sig_val, to_msgs):
-        return self._tfunc(self._msg, sig_val, to_msgs)
+        return self._tfunc(self.msg, sig_val, to_msgs)
 
-    def map_alarm_sig(self, sig_val, to_msgs):
+    @staticmethod
+    def map_alarm_sig(msg, sig_val, to_msgs):
         ''' returns a mutate to_msgs which contains a mapped boolean alarm value
         '''
 
-        for msg_name, sig_names in self._msg.items():
+        for msg_name, sig_names in msg.items():
             for sig_name in sig_names:
                 match = alarm_re.match(sig_name)
                 if match:
@@ -80,11 +82,12 @@ class Map:
                         LOGGER.warning("unable to match alarm signal: %s", sig_name)
         return to_msgs
 
-    def map_invert_alarm_sig(self, sig_val, to_msgs):
+    @staticmethod
+    def map_invert_alarm_sig(msg, sig_val, to_msgs):
         ''' returns a mutate to_msgs which contains a mapped boolean alarm value
             that is inverted. boolean hi = no alarm, boolean lo = alarm.
         '''
-        for msg_name, sig_names in self._msg.items():
+        for msg_name, sig_names in msg.items():
             for sig_name in sig_names:
                 match = alarm_re.match(sig_name)
                 if match:
@@ -106,11 +109,12 @@ class Map:
                         LOGGER.warning("unable to match alarm signal: %s", sig_name)
         return to_msgs
 
-    def map_default_sig(self, sig_value, to_msgs):
+    @staticmethod
+    def map_default_sig(msg, sig_value, to_msgs):
         ''' returns a mutated translated_msgs which contains the message and signal value
         '''
 
-        for msg_name, sig_names in self._msg.items():
+        for msg_name, sig_names in msg.items():
             for sig_name in sig_names:
                 to_msgs = Map._write_sig_val(
                     msg_name,
