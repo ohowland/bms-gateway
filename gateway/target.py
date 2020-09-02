@@ -31,7 +31,7 @@ class Target:
 
         self._status = dict()
         self._control = dict()
-        self._reader = canreader.CANReader(config, self._bus, loop)
+        self._reader = canreader.CANReader(self._bus, loop)
         self._writer = canwriter.CANWriter(config, self._bus)
         self._write_buffer = list() 
         
@@ -72,7 +72,8 @@ class Target:
             else:
                 self._control.update({msg_name: signals})
         
-        self._update_write_buffer(msg)
+        if self._ready:
+            self._update_write_buffer(msg)
 
     def _update_write_buffer(self, msg):
         for name in msg.keys():

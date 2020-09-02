@@ -8,7 +8,7 @@ import can
 
 from functools import reduce
 
-log = logging.getLogger('framer')
+LOGGER = logging.getLogger('framer')
 
 class Framer:
 
@@ -26,11 +26,11 @@ class Framer:
     def decode_from_frame(self, msg):
         try:
             decoded_data = self.db.decode_message(msg.arbitration_id, msg.data, scaling=True) 
-            log.debug(decoded_data)
+            LOGGER.debug("decoded frame: %s", decoded_data)
             msg_name = self.db.get_message_by_frame_id(msg.arbitration_id).name
             return {msg_name: decoded_data}
         except KeyError as e:
-            log.warning("unable to decode message 0x{:02x}".format(int(str(e))))
+            LOGGER.warning("unable to decode message 0x{:02x}".format(int(str(e))))
             return None
 
 
@@ -38,12 +38,12 @@ class Framer:
         try:
             template = self.db.get_message_by_name(name)
         except Exception as e:
-            log.warning(e)
+            LOGGER.warning(e)
             return None
 
         try:
             encoded_data = self.db.encode_message(template.frame_id, data, scaling=True)
-            log.debug(encoded_data)
+            #LOGGER.debug(encoded_data)
             msg = can.Message(arbitration_id = template.frame_id,
                               data = encoded_data,
                               is_extended_id = template.is_extended_frame,
@@ -51,5 +51,5 @@ class Framer:
             return msg
 
         except Exception as e:
-            log.warning(e)
+            LOGGER.warning(e)
             return None
