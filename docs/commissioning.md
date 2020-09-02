@@ -14,6 +14,7 @@ ifconfig -ai
 `grep PEAK_ /boot/config-'uname -r'`   
 
 ## Auto-up CAN interfaces
+DEBIAN 10:
 The script `setup/canup.sh` will configure the `/etc/network/interface` with the following:
 ``` 
 auto can0  
@@ -33,6 +34,30 @@ the network service must be reset after installation:
 `sudo /etc/init.d/networking restart`  
 OR  
 `sudo systemctl restart networking`
+
+UBUNTU 18.04LTS:  
+The script `setup/canup-ubuntu-19.sh` will configure the /etc/systemd/network with the following:
+
+[match]  
+name=can0  
+  
+[CAN]  
+...
+  
+[match]  
+name=can1  
+  
+[CAN]  
+...  
+
+unforuntatly ubuntu 18.04 LTS uses systemd-237 and we need systemd-239 for this to work.  
+we can always use the commnad:
+
+`ip link set dev can0 up type can bitrate 500000 restart-ms 1000`
+`ip link set dev can1 up type can bitrate 500000 restart-ms 1000`
+
+inspect the can interface with: `ip -details link show can0`
+
 
 # Setup test environment
 
