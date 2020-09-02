@@ -19,13 +19,10 @@ async def bms_target(target, queue):
     """
 
     while True:
-        try:
-            msg = await target.read_canbus()
-            if msg:
-                target.update_status(msg)
-                await queue.put(msg)
-        except Exception as error:
-            LOGGER.warning("bms_target: %s", error)
+        msg = await target.read_canbus()
+        if msg:
+            target.update_status(msg)
+            await queue.put(msg)
 
 async def translation_loop(translator, in_queue, out_queue):
     """ the translation loop facilitates mapping of incoming data
@@ -61,17 +58,14 @@ async def inv_target(target, queue):
     target.update_control(static)
 
     while True:
-        try:
-            msg = await queue.get()
-            if msg:
-                LOGGER.debug(msg)
-                target.update_control(msg)
+        msg = await queue.get()
+        if msg:
+            LOGGER.debug(msg)
+            target.update_control(msg)
 
-            if target.ready():
-                for msg in target.get_write_buffer():
-                    target.write_canbus(msg)
-        except Exception as error:
-            LOGGER.warning("inv_target: %s", error)
+        if target.ready():
+            for msg in target.get_write_buffer():
+                target.write_canbus(msg)
 
 def main(**kwargs):
     """ start the BMS-SMA gateway
@@ -95,7 +89,8 @@ def main(**kwargs):
 
     try:
         loop.run_forever()
-    except Exception:
+    except Exception as error:
+        LOGGER.fatal("system crash %s", error)
         loop.close()
 
 if __name__ == '__main__':
