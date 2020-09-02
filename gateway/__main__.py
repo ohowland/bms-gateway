@@ -9,7 +9,7 @@ from pathlib import Path
 def main(*args, **kwargs):
 
     logger = logging.getLogger()
-    logger.setLevel(logging.WARNING)
+    logger.setLevel(logging.INFO)
     file_handler = logging.handlers.RotatingFileHandler('error.log', maxBytes=100000, backupCount=1)
     file_handler.setLevel(logging.WARNING)
 
@@ -26,7 +26,6 @@ def main(*args, **kwargs):
     logger.info('Booting Nuvation-SMA Gateway v0.1')
 
     bootstrap_path = Path.cwd()
-    logger.info(bootstrap_path)
     while bootstrap_path.parent.stem == 'bms-gateway':
         bootstrap_path = bootstrap_path.parent
     bootstrap_path = bootstrap_path.joinpath('config', 'bootstrap.ini')
