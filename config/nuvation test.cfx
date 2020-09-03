@@ -28,6 +28,7 @@
     <CAN_Database_Files>
       <FilePath>..\..\..\Documents\Work\New_Database1.DBF</FilePath>
       <FilePath>nuvation.dbf</FilePath>
+      <FilePath>sma.dbf</FilePath>
     </CAN_Database_Files>
     <Bus_Statistics>
       <CAN_Statistics>
@@ -115,8 +116,8 @@
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>HIDE</WindowPlacement>
         <Top>70</Top>
-        <Left>-124</Left>
-        <Right>366</Right>
+        <Left>-310</Left>
+        <Right>180</Right>
         <Bottom>300</Bottom>
       </Window_Position>
       <COLUMN_WIDTH>
@@ -131,8 +132,8 @@
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>HIDE</WindowPlacement>
         <Top>70</Top>
-        <Left>-124</Left>
-        <Right>366</Right>
+        <Left>-310</Left>
+        <Right>180</Right>
         <Bottom>300</Bottom>
       </Window_Position>
       <COLUMN_WIDTH>
@@ -147,8 +148,8 @@
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>HIDE</WindowPlacement>
         <Top>70</Top>
-        <Left>-124</Left>
-        <Right>366</Right>
+        <Left>-310</Left>
+        <Right>180</Right>
         <Bottom>300</Bottom>
       </Window_Position>
       <COLUMN_WIDTH>
@@ -285,15 +286,15 @@
         <ID>Data Byte(s)</ID>
         <Order>9</Order>
         <IsVisible>1</IsVisible>
-        <Width>689</Width>
+        <Width>1027</Width>
       </COLUMN>
       <IsHex>1</IsHex>
       <IsAppend>0</IsAppend>
       <IsInterpret>0</IsInterpret>
       <Time_Mode>SYSTEM</Time_Mode>
       <Window_Position>
-        <Visibility>SHOWNORMAL</Visibility>
-        <WindowPlacement>SETMINPOSITION</WindowPlacement>
+        <Visibility>MAXIMIZE</Visibility>
+        <WindowPlacement>RESTORETOMAXIMIZED</WindowPlacement>
         <Top>3</Top>
         <Left>19</Left>
         <Bottom>586</Bottom>
@@ -497,10 +498,10 @@
       <Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>SETMINPOSITION</WindowPlacement>
-        <Top>-12</Top>
-        <Left>592</Left>
-        <Bottom>643</Bottom>
-        <Right>1452</Right>
+        <Top>98</Top>
+        <Left>667</Left>
+        <Bottom>753</Bottom>
+        <Right>1527</Right>
       </Window_Position>
       <Message_List>
         <Message>
@@ -570,7 +571,7 @@
           <IsRtr>FALSE</IsRtr>
           <DLC>1</DLC>
           <DataBytes>0</DataBytes>
-          <Repetion>500</Repetion>
+          <Repetion>200</Repetion>
           <Repetition_Enabled>TRUE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
@@ -582,7 +583,7 @@
           <IsRtr>FALSE</IsRtr>
           <DLC>1</DLC>
           <DataBytes>0</DataBytes>
-          <Repetion>500</Repetion>
+          <Repetion>200</Repetion>
           <Repetition_Enabled>TRUE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
@@ -594,7 +595,7 @@
           <IsRtr>FALSE</IsRtr>
           <DLC>1</DLC>
           <DataBytes>0</DataBytes>
-          <Repetion>500</Repetion>
+          <Repetion>200</Repetion>
           <Repetition_Enabled>TRUE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
@@ -606,7 +607,7 @@
           <IsRtr>FALSE</IsRtr>
           <DLC>1</DLC>
           <DataBytes>0</DataBytes>
-          <Repetion>500</Repetion>
+          <Repetion>200</Repetion>
           <Repetition_Enabled>TRUE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
@@ -618,7 +619,7 @@
           <IsRtr>FALSE</IsRtr>
           <DLC>1</DLC>
           <DataBytes>0</DataBytes>
-          <Repetion>500</Repetion>
+          <Repetion>200</Repetion>
           <Repetition_Enabled>TRUE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
@@ -630,7 +631,7 @@
           <IsRtr>FALSE</IsRtr>
           <DLC>1</DLC>
           <DataBytes>0</DataBytes>
-          <Repetion>500</Repetion>
+          <Repetion>200</Repetion>
           <Repetition_Enabled>TRUE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
@@ -642,7 +643,7 @@
           <IsRtr>FALSE</IsRtr>
           <DLC>1</DLC>
           <DataBytes>0</DataBytes>
-          <Repetion>500</Repetion>
+          <Repetion>200</Repetion>
           <Repetition_Enabled>TRUE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
@@ -654,7 +655,7 @@
           <IsRtr>FALSE</IsRtr>
           <DLC>1</DLC>
           <DataBytes>0</DataBytes>
-          <Repetion>500</Repetion>
+          <Repetion>200</Repetion>
           <Repetition_Enabled>TRUE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
@@ -666,7 +667,7 @@
           <IsRtr>FALSE</IsRtr>
           <DLC>1</DLC>
           <DataBytes>0</DataBytes>
-          <Repetion>500</Repetion>
+          <Repetion>200</Repetion>
           <Repetition_Enabled>TRUE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
@@ -678,7 +679,7 @@
           <IsRtr>FALSE</IsRtr>
           <DLC>1</DLC>
           <DataBytes>0</DataBytes>
-          <Repetion>500</Repetion>
+          <Repetion>200</Repetion>
           <Repetition_Enabled>TRUE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
@@ -690,7 +691,7 @@
           <IsRtr>FALSE</IsRtr>
           <DLC>1</DLC>
           <DataBytes>1</DataBytes>
-          <Repetion>500</Repetion>
+          <Repetion>200</Repetion>
           <Repetition_Enabled>TRUE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
@@ -702,7 +703,7 @@
           <IsRtr>FALSE</IsRtr>
           <DLC>4</DLC>
           <DataBytes>32,203,0,0</DataBytes>
-          <Repetion>500</Repetion>
+          <Repetion>200</Repetion>
           <Repetition_Enabled>TRUE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
@@ -713,8 +714,8 @@
           <IsExtended>FALSE</IsExtended>
           <IsRtr>FALSE</IsRtr>
           <DLC>4</DLC>
-          <DataBytes>120,224,1,0</DataBytes>
-          <Repetion>500</Repetion>
+          <DataBytes>24,121,0,0</DataBytes>
+          <Repetion>200</Repetion>
           <Repetition_Enabled>TRUE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
@@ -725,8 +726,8 @@
           <IsExtended>FALSE</IsExtended>
           <IsRtr>FALSE</IsRtr>
           <DLC>2</DLC>
-          <DataBytes>0,0</DataBytes>
-          <Repetion>500</Repetion>
+          <DataBytes>30,0</DataBytes>
+          <Repetion>200</Repetion>
           <Repetition_Enabled>TRUE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
