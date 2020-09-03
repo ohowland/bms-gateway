@@ -186,7 +186,7 @@ BMS_TO_SMA = {
     },
     "IO_OVERALL_SAFE": {
         "IO_OVERALL_SAFE":
-            Map({"IO_ALARM": {"IO_ALARM_GENERAL_ARRIVE", "IO_ALARM_GENERAL_LEAVE"}, "IO_ALARM": {"IO_WARN_GENERAL_ARRIVE", "IO_WARN_GENERAL_LEAVE"}}, Map.map_invert_alarm_sig)
+            Map({"IO_ALARM": {"IO_ALARM_GENERAL_ARRIVE", "IO_ALARM_GENERAL_LEAVE", "IO_WARN_GENERAL_ARRIVE", "IO_WARN_GENERAL_LEAVE"}}, Map.map_invert_alarm_sig)
     },
     "IO_SAFE_TO_CHRG": {
         "IO_SAFE_TO_CHRG":
@@ -222,43 +222,43 @@ BMS_TO_SMA = {
     },
     "IO_FAULT_STACK_HI_V": {
         "IO_FAULT_STACK_HI_V":
-        Map({"IO_ALARM" : {"IO_ALARM_HI_V_ARRIVE", "IO_ALARM_HI_V_LEAVE"}, "IO_ALARM": {"IO_WARN_HI_V_ARRIVE", "IO_WARN_HI_V_LEAVE"}}, Map.map_alarm_sig)
+        Map({"IO_ALARM" : {"IO_ALARM_HI_V_ARRIVE", "IO_ALARM_HI_V_LEAVE", "IO_WARN_HI_V_ARRIVE", "IO_WARN_HI_V_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_STACK_LO_V": {
         "IO_FAULT_STACK_LO_V":
-            Map({"IO_ALARM" : {"IO_ALARM_LO_V_ARRIVE", "IO_ALARM_LO_V_LEAVE"}, "IO_ALARM" : {"IO_WARN_LO_V_ARRIVE", "IO_WARN_LO_V_LEAVE"}}, Map.map_alarm_sig)
+            Map({"IO_ALARM" : {"IO_ALARM_LO_V_ARRIVE", "IO_ALARM_LO_V_LEAVE", "IO_WARN_LO_V_ARRIVE", "IO_WARN_LO_V_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_TEMP_HI": {
         "IO_FAULT_TEMP_HI":
-            Map({"IO_ALARM" : {"IO_ALARM_HI_TEMP_ARRIVE", "IO_ALARM_HI_TEMP_LEAVE"}, "IO_ALARM" : {"IO_WARN_HI_TEMP_ARRIVE", "IO_WARN_HI_TEMP_LEAVE"}}, Map.map_alarm_sig)
+            Map({"IO_ALARM" : {"IO_ALARM_HI_TEMP_ARRIVE", "IO_ALARM_HI_TEMP_LEAVE", "IO_WARN_HI_TEMP_ARRIVE", "IO_WARN_HI_TEMP_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_TEMP_LO": {
         "IO_FAULT_TEMP_LO":
-            Map({"IO_ALARM" : {"IO_ALARM_LO_TEMP_ARRIVE", "IO_ALARM_LO_TEMP_LEAVE"}, "IO_ALARM" : {"IO_WARN_LO_TEMP_ARRIVE", "IO_WARN_LO_TEMP_LEAVE"}}, Map.map_alarm_sig)
+            Map({"IO_ALARM" : {"IO_ALARM_LO_TEMP_ARRIVE", "IO_ALARM_LO_TEMP_LEAVE", "IO_WARN_LO_TEMP_ARRIVE", "IO_WARN_LO_TEMP_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_CHRG_TEMP_HI": {
         "IO_FAULT_CHRG_TEMP_HI":
-            Map({"IO_ALARM" : {"IO_ALARM_HI_TEMP_CHRG_ARRIVE", "IO_ALARM_HI_TEMP_CHRG_LEAVE"}, "IO_ALARM" : {"IO_WARN_HI_TEMP_CHRG_ARRIVE", "IO_WARN_HI_TEMP_CHRG_LEAVE"}}, Map.map_alarm_sig)
+            Map({"IO_ALARM" : {"IO_ALARM_HI_TEMP_CHRG_ARRIVE", "IO_ALARM_HI_TEMP_CHRG_LEAVE", "IO_WARN_HI_TEMP_CHRG_ARRIVE", "IO_WARN_HI_TEMP_CHRG_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_CHRG_TEMP_LO": {
         "IO_FAULT_CHRG_TEMP_LO":
-            Map({"IO_ALARM" : {"IO_ALARM_LO_TEMP_CHRG_ARRIVE", "IO_ALARM_LO_TEMP_CHRG_LEAVE"}, "IO_ALARM" : {"IO_WARN_LO_TEMP_CHRG_ARRIVE", "IO_WARN_LO_TEMP_CHRG_LEAVE"}}, Map.map_alarm_sig)
+            Map({"IO_ALARM" : {"IO_ALARM_LO_TEMP_CHRG_ARRIVE", "IO_ALARM_LO_TEMP_CHRG_LEAVE", "IO_WARN_LO_TEMP_CHRG_ARRIVE", "IO_WARN_LO_TEMP_CHRG_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_STACK_HI_I": {
         "IO_FAULT_STACK_HI_I":
-            Map({"IO_ALARM" : {"IO_ALARM_HI_I_ARRIVE", "IO_ALARM_HI_I_LEAVE"}, "IO_ALARM" : {"IO_WARN_HI_I_ARRIVE", "IO_WARN_HI_I_LEAVE"}}, Map.map_alarm_sig)
+            Map({"IO_ALARM" : {"IO_ALARM_HI_I_ARRIVE", "IO_ALARM_HI_I_LEAVE", "IO_WARN_HI_I_ARRIVE", "IO_WARN_HI_I_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_STACK_LO_I": {
         "IO_FAULT_STACK_LO_I":
-            Map({"IO_ALARM" : {"IO_ALARM_HI_I_CHRG_ARRIVE", "IO_ALARM_HI_I_CHRG_LEAVE"}, "IO_ALARM" : {"IO_WARN_HI_I_CHRG_ARRIVE", "IO_WARN_HI_I_CHRG_LEAVE"}}, Map.map_alarm_sig)
+            Map({"IO_ALARM" : {"IO_ALARM_HI_I_CHRG_ARRIVE", "IO_ALARM_HI_I_CHRG_LEAVE", "IO_WARN_HI_I_CHRG_ARRIVE", "IO_WARN_HI_I_CHRG_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_CONTACTOR": {
         "IO_FAULT_CONTACTOR":
-            Map({"IO_ALARM" : {"IO_ALARM_CONTACTOR_ARRIVE", "IO_ALARM_CONTACTOR_LEAVE"}, "IO_ALARM" : {"IO_WARN_CONTACTOR_ARRIVE", "IO_WARN_CONTACTOR_LEAVE"}}, Map.map_alarm_sig)
+            Map({"IO_ALARM" : {"IO_ALARM_CONTACTOR_ARRIVE", "IO_ALARM_CONTACTOR_LEAVE", "IO_WARN_CONTACTOR_ARRIVE", "IO_WARN_CONTACTOR_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_FAULT_LINKBUS": {
         "IO_FAULT_LINKBUS":
-            Map({"IO_ALARM" : {"IO_ALARM_BMS_ARRIVE", "IO_ALARM_BMS_LEAVE"}, "IO_ALARM" : {"IO_WARN_BMS_ARRIVE", "IO_WARN_BMS_LEAVE"}}, Map.map_alarm_sig)
+            Map({"IO_ALARM" : {"IO_ALARM_BMS_ARRIVE", "IO_ALARM_BMS_LEAVE", "IO_WARN_BMS_ARRIVE", "IO_WARN_BMS_LEAVE"}}, Map.map_alarm_sig)
     },
     "IO_CHRG_V": {
         "IO_CHRG_V":

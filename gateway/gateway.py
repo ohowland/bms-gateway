@@ -7,6 +7,7 @@
 
 import asyncio
 import logging
+import time
 
 from target import Target
 from translator import Translator
@@ -66,6 +67,14 @@ async def inv_target(target, queue):
         if target.ready():
             for msg in target.get_write_buffer():
                 target.write_canbus(msg)
+
+def timer():
+    start_time = time.time()
+
+    def internal_timer():
+        return time.time()-start_time 
+
+    return internal_timer
 
 def main(**kwargs):
     """ start the BMS-SMA gateway

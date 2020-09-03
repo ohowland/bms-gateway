@@ -3,7 +3,8 @@ Description=BMS-SMA Gateway
 
 [Service]
 WorkingDirectory=/home/owen/bms-gateway/
-ExecStart=/home/owen/bms-gateway/venv/bin/python /home/owen/bms-gateway/gateway --serve-in-foreground
+ExecStart=/home/owen/bms-gateway/venv/bin/python /home/owen/bms-gateway/gateway
+Nice=-2
 Restart=on-failure
 RestartSec=5s
 

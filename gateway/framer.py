@@ -29,7 +29,7 @@ class Framer:
             msg_name = self.db.get_message_by_frame_id(msg.arbitration_id).name
             return {msg_name: decoded_data}
         except KeyError as error:
-            LOGGER.warning("key %s not found in CAN database", msg.name)
+            LOGGER.warning("CAN frame id 0x{:02x} not found in CAN database".format(int(str(error))))
         except cantools.database.DecodeError as error:
             LOGGER.warning("unable to decode message 0x{:02x}".format(int(str(error))))
             return None
