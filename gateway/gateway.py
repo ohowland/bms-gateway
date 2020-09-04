@@ -61,20 +61,10 @@ async def inv_target(target, queue):
     while True:
         msg = await queue.get()
         if msg:
-            LOGGER.debug(msg)
             target.update_control(msg)
-
-        if target.ready():
-            for msg in target.get_write_buffer():
-                target.write_canbus(msg)
-
-def timer():
-    start_time = time.time()
-
-    def internal_timer():
-        return time.time()-start_time 
-
-    return internal_timer
+            if target.ready():
+                for msg in target.get_write_buffer():
+                    target.write_canbus(msg)
 
 def main(**kwargs):
     """ start the BMS-SMA gateway

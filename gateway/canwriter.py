@@ -18,9 +18,6 @@ class CANWriter:
         self._update_rate = float(config['update_rate'])
         self._tasks = {}
 
-    def __del__(self):
-        self.stop()
-
     def publish(self, name, msg):
         ''' iterate messages, check if a task is to be created or modified
         '''

@@ -18,12 +18,11 @@ def main(*args, **kwargs):
 
     formatter = logging.Formatter('[%(asctime)s] %(name)s_%(levelname)s: %(message)s') 
     file_handler.setFormatter(formatter)
-    stream_handler.setFormatter(formatter)
 
     logger.addHandler(file_handler)
     logger.addHandler(stream_handler)
 
-    logger.info('Booting Nuvation-SMA Gateway v0.1')
+    logger.info('Booting Nuvation-SMA Gateway v1.0')
 
     bootstrap_path = Path.cwd()
     while bootstrap_path.parent.stem == 'bms-gateway':
@@ -35,7 +34,7 @@ def main(*args, **kwargs):
 
     gateway.main(bootstrap=bootstrap_parser)
 
-    logger.info('Shutdown Complete')
+    logger.info('Nuvation-SMA Gateway Shutdown Complete')
 
 if __name__ == '__main__':
     main()

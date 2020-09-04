@@ -5,7 +5,6 @@
 """
 
 import logging
-
 import can
 
 LOGGER = logging.getLogger('can_reader')
@@ -18,15 +17,11 @@ class CANReader:
         self._listener = can.AsyncBufferedReader()
         self._notifier = can.Notifier(bus, [self._listener], loop=loop)
 
-    def __del__(self):
-        self.stop()
-
     def __aiter__(self):
         return self
 
     async def __anext__(self):
         msg = await self._listener.get_message()
-        LOGGER.debug(msg)
         if not msg:
             raise StopAsyncIteration
 
@@ -37,8 +32,7 @@ class CANReader:
         """
 
         msg = await self._listener.get_message()
-        LOGGER.debug(msg)
-        return msg
+        return msg 
 
     def stop(self):
         """ stop disconnects this routine from the can bus
