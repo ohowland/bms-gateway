@@ -1,4 +1,4 @@
-# Setup of Gateway Hardware
+# Setup Gateway Hardware
 ## Install the Peak Linux Drivers (download latest from website) *- required*
 
 `https://www.peak-system.com/fileadmin/media/linux/index.htm`
@@ -58,6 +58,10 @@ inspect the can interface with: `ip -details link show can0`
 
 This has been placed in the script `canup-ubuntu-18.sh` copy this file into the
 `/etc/init.d/` folder. This will run on startup.
+
+## Run the modprobe script (autoload pcan)
+
+`/setup/modprobe-pcan.sh`
 
 # Configure the Gateway Software
 
