@@ -25,7 +25,7 @@ class Framer:
     def decode_from_frame(self, msg):
         try:
             decoded_data = self.db.decode_message(msg.arbitration_id, msg.data, scaling=True)
-            LOGGER.debug("decoded frame: %s", decoded_data)
+            #LOGGER.debug("decoded frame: %s", decoded_data)
             msg_name = self.db.get_message_by_frame_id(msg.arbitration_id).name
             return {msg_name: decoded_data}
         except KeyError as error:

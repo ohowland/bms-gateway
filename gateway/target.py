@@ -5,6 +5,7 @@
 import logging
 import time
 import can
+import copy
 
 import framer
 import canreader
@@ -31,9 +32,24 @@ class Target:
 
         self._status = dict()
         self._control = dict()
-        self._reader = canreader.CANReader(self._bus, loop)
-        self._writer = canwriter.CANWriter(config, self._bus)
-        self._write_buffer = list() 
+
+        if config['access'] == "read-only" or "read-write":
+            self._reader = canreader.CANReader(self._bus, loop)
+        else:
+            self._reader = None
+        
+        if config['access'] == "write-only" or "read-write":
+            self._writer = canwriter.CANWriter(config, self._bus)
+            self._write_buffer = list()
+        else:
+            self._writer = None
+
+        if self._writer and self._reader == None:
+            LOGGER.warning(
+                "target has neither read or write access to canbus. \
+                 configure the 'access' key in the configuration file \
+                 as 'read-only' 'write-only' or 'read-write'."
+            )
         
         self._ready = False
 
@@ -103,8 +119,8 @@ class Target:
             internal buffer storage
         '''
 
-        write_buffer = self._write_buffer
-        self._write_buffer = list() # Clear the buffer after read
+        write_buffer = copy.copy(self._write_buffer)
+        self._write_buffer.clear() # Clear the buffer after read
         return write_buffer
 
     def ready(self):
