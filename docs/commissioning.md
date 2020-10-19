@@ -154,19 +154,19 @@ sc_canbus_map[21].address @sc_controller_heartbeat.value
 
 -- NEW --
 
-sc_canbus_map[22].address @stack_fault_voltage_hi
-sc_canbus_map[23].address @stack_fault_voltage_lo
-sc_canbus_map[24].address @stack_fault_therm_hi
-sc_canbus_map[25].address @stack_fault_therm_lo
-sc_canbus_map[26].address @stack_fault_charge_therm_hi
-sc_canbus_map[27].address @stack_fault_charge_therm_lo
-sc_canbus_map[28].address @stack_fault_current_hi
-sc_canbus_map[29].address @stack_fault_current_lo
-sc_canbus_map[30].address @stack_fault_coil_fail
-sc_canbus_map[31].address @stack_fault_linkbus_wdt
+sc_canbus_map[22].address @stack_fault_voltage_hi -> 0x25000 -> 151552
+sc_canbus_map[23].address @stack_fault_voltage_lo -> 0x25028 -> 151592
+sc_canbus_map[24].address @stack_fault_therm_hi -> 0x230C0 -> 143552
+sc_canbus_map[25].address @stack_fault_therm_lo -> 0x230D0 -> 143568
+sc_canbus_map[26].address @stack_fault_charge_therm_hi -> 0x23030 -> 143408
+sc_canbus_map[27].address @stack_fault_charge_therm_lo -> 0x23058 -> 143448
+sc_canbus_map[28].address @stack_fault_current_hi -> 0x24000 -> 147456
+sc_canbus_map[29].address @stack_fault_current_lo -> 0x24028 -> 147496
+sc_canbus_map[30].address @stack_fault_coil_fail -> 0x253C0 -> 152512
+sc_canbus_map[31].address @stack_fault_linkbus_wdt -> 0x25110 -> 151824
 
-sc_canbus_map[32].address @stack_soc.vfull
-sc_canbus_map[33].address @stack_soc.vempty
+sc_canbus_map[32].address @stack_soc.vfull -> 0x16000 offset 0x9 -> 90121
+sc_canbus_map[33].address @stack_soc.vempty -> 0x16000 offset 0x8 -> 90120
 ```
 
 # Installation of Hardware
@@ -181,4 +181,10 @@ Install splitter at Nuvation BMS and terminate male connection at CANbus input o
 
 ## Gateway
 
+# Testing notes:
+nuvation IO clock from milliseconds to seconds.
+charge lim amps to milliamps.
+discharge lim amps to milliamps.
+
+need to disable heartbeat at BMS
 
