@@ -5,7 +5,7 @@
   1. [x] Document process for checking CAN signal integrity
   2. [ ] Process for checking CAN messaging integrity (scale, addr, size)
 - [x] Document connector build
-- [ ] Finalize parts list
+- [x] Finalize parts list
 
 # Core Code
 - [x] Use filters on CANreader to reject unknown messages
@@ -21,18 +21,18 @@ https://stackoverflow.com/questions/19880190/interactive-input-output-using-pyth
   2. [x] Wait until all signal names are found in `self.control` before enabling can publishing 
 - [x] Read a charge V and discharge V from nuvation, report to SMA. what registers are we mapping? these registers are in the dbc file after the nuvation alarms.
 - [x] limit error log size, see rotatinghandler
-- [ ] Verify behavior when None is return from Map
-- [ ] use pylint to clean up code.
-- [ ] define error paths in software, what errors should cause the system to crash/restart? what should be handled internally?
+- [x] Verify behavior when None is return from Map
+- [x] use pylint to clean up code.
+- [x] define error paths in software, what errors should cause the system to crash/restart? what should be handled internally?
 
 # Testing hardware/code
 - [ ] Check unit test coverage
 - [x] Complete basic unittests for each module
-- [ ] Write integration tests
+- [x] Write integration tests
 - [ ] Test error handling
-  1. [ ] loss of connection
-  2. [ ] out of range id recieved
-  3. [ ] what happens when a read, write, or translate loop crashes? I think the service should exit and allow systemd to restart it.
+  1. [x] loss of connection
+  2. [x] out of range id recieved
+  3. [x] what happens when a read, write, or translate loop crashes? I think the service should exit and allow systemd to restart it.
 this should only happen on an unexpected error.
 
 # System Scripts
@@ -44,7 +44,7 @@ this should only happen on an unexpected error.
 - [x] Start SSH server. this will automatically come up with openssh-server, remember to let through firewall.
 
 # Hardware Build Setup
-- [ ] Build rj45-db9 connectors with termination
+- [x] Build rj45-db9 connectors with termination
 - [x] Install mPCIe CAN cards
 
 # Gateway configraution
@@ -55,3 +55,17 @@ this should only happen on an unexpected error.
 - [x] 2x LogicSupply PCs
 - [x] 2x Peak mPCIe dual can cards
 - [x] 4x CAN-RJ45 converters
+
+# Before Shipping
+- [ ] Configure ethernet settings:
+- unit #1 (Tom's FIL House):  
+ip: 192.168.254.88  
+subnet: 255.255.255.0  
+gateway: 192.168.254.254
+dns 192.168.16.2
+
+- unit #2 (HLM Residence):  
+ip: 172.16.200.88
+subnet: 255.255.255.0
+gateway 172.16.0.1
+dns: 172.16.100.1
