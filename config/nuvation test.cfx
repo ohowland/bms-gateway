@@ -26,9 +26,8 @@
   </Global_Configuration>
   <Module_Configuration>
     <CAN_Database_Files>
-      <FilePath>..\..\..\Documents\Work\New_Database1.DBF</FilePath>
-      <FilePath>nuvation.dbf</FilePath>
       <FilePath>sma.dbf</FilePath>
+      <FilePath>nuvation.dbf</FilePath>
     </CAN_Database_Files>
     <Bus_Statistics>
       <CAN_Statistics>
@@ -116,8 +115,8 @@
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>HIDE</WindowPlacement>
         <Top>70</Top>
-        <Left>0</Left>
-        <Right>490</Right>
+        <Left>-78</Left>
+        <Right>412</Right>
         <Bottom>300</Bottom>
       </Window_Position>
       <COLUMN_WIDTH>
@@ -132,8 +131,8 @@
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>HIDE</WindowPlacement>
         <Top>70</Top>
-        <Left>0</Left>
-        <Right>490</Right>
+        <Left>-78</Left>
+        <Right>412</Right>
         <Bottom>300</Bottom>
       </Window_Position>
       <COLUMN_WIDTH>
@@ -148,8 +147,8 @@
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>HIDE</WindowPlacement>
         <Top>70</Top>
-        <Left>0</Left>
-        <Right>490</Right>
+        <Left>-78</Left>
+        <Right>412</Right>
         <Bottom>300</Bottom>
       </Window_Position>
       <COLUMN_WIDTH>
@@ -306,15 +305,15 @@
         <Top>179</Top>
         <Left>10</Left>
         <Bottom>457</Bottom>
-        <Right>359</Right>
+        <Right>605</Right>
       </Interpretation_Window_Position>
     </CAN_Message_Window>
     <J1939_Message_Window>
       <COLUMN>
         <ID/>
         <Order>1</Order>
-        <IsVisible>0</IsVisible>
-        <Width>0</Width>
+        <IsVisible>1</IsVisible>
+        <Width>19</Width>
       </COLUMN>
       <COLUMN>
         <ID>Time</ID>
@@ -386,11 +385,11 @@
         <ID>Data Byte(s)</ID>
         <Order>13</Order>
         <IsVisible>1</IsVisible>
-        <Width>642</Width>
+        <Width>623</Width>
       </COLUMN>
       <IsHex>1</IsHex>
       <IsAppend>0</IsAppend>
-      <IsInterpret>0</IsInterpret>
+      <IsInterpret>1</IsInterpret>
       <Time_Mode>SYSTEM</Time_Mode>
       <Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
@@ -416,8 +415,8 @@
       <COLUMN>
         <ID/>
         <Order>1</Order>
-        <IsVisible>0</IsVisible>
-        <Width>0</Width>
+        <IsVisible>1</IsVisible>
+        <Width>19</Width>
       </COLUMN>
       <COLUMN>
         <ID>Time</ID>
@@ -471,11 +470,11 @@
         <ID>Checksum</ID>
         <Order>10</Order>
         <IsVisible>1</IsVisible>
-        <Width>656</Width>
+        <Width>637</Width>
       </COLUMN>
       <IsHex>1</IsHex>
       <IsAppend>0</IsAppend>
-      <IsInterpret>0</IsInterpret>
+      <IsInterpret>1</IsInterpret>
       <Time_Mode>SYSTEM</Time_Mode>
       <Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
@@ -506,246 +505,55 @@
       <Message_List>
         <Message>
           <Channel>1</Channel>
-          <Message_ID>259</Message_ID>
+          <Message_ID>849</Message_ID>
           <IsExtended>FALSE</IsExtended>
           <IsRtr>FALSE</IsRtr>
-          <DLC>1</DLC>
-          <DataBytes>72</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
+          <DLC>8</DLC>
+          <DataBytes>28,2,10,0,10,0,224,1</DataBytes>
+          <Repetion>500</Repetion>
+          <Repetition_Enabled>FALSE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
         </Message>
         <Message>
           <Channel>1</Channel>
-          <Message_ID>270</Message_ID>
+          <Message_ID>853</Message_ID>
           <IsExtended>FALSE</IsExtended>
           <IsRtr>FALSE</IsRtr>
-          <DLC>4</DLC>
-          <DataBytes>200,0,0,0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
+          <DLC>6</DLC>
+          <DataBytes>99,0,100,0,222,38</DataBytes>
+          <Repetion>500</Repetion>
+          <Repetition_Enabled>FALSE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
         </Message>
         <Message>
           <Channel>1</Channel>
-          <Message_ID>272</Message_ID>
+          <Message_ID>854</Message_ID>
           <IsExtended>FALSE</IsExtended>
           <IsRtr>FALSE</IsRtr>
-          <DLC>4</DLC>
-          <DataBytes>200,0,0,0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
+          <DLC>6</DLC>
+          <DataBytes>230,20,0,0,170,0</DataBytes>
+          <Repetion>500</Repetion>
+          <Repetition_Enabled>FALSE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
         </Message>
         <Message>
           <Channel>1</Channel>
-          <Message_ID>288</Message_ID>
+          <Message_ID>858</Message_ID>
           <IsExtended>FALSE</IsExtended>
           <IsRtr>FALSE</IsRtr>
-          <DLC>4</DLC>
-          <DataBytes>192,218,0,0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
-          <Key_Value>a</Key_Value>
-          <Key_Enabled>FALSE</Key_Enabled>
-        </Message>
-        <Message>
-          <Channel>1</Channel>
-          <Message_ID>289</Message_ID>
-          <IsExtended>FALSE</IsExtended>
-          <IsRtr>FALSE</IsRtr>
-          <DLC>4</DLC>
-          <DataBytes>176,179,0,0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
-          <Key_Value>a</Key_Value>
-          <Key_Enabled>FALSE</Key_Enabled>
-        </Message>
-        <Message>
-          <Channel>1</Channel>
-          <Message_ID>278</Message_ID>
-          <IsExtended>FALSE</IsExtended>
-          <IsRtr>FALSE</IsRtr>
-          <DLC>1</DLC>
-          <DataBytes>0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
-          <Key_Value>a</Key_Value>
-          <Key_Enabled>FALSE</Key_Enabled>
-        </Message>
-        <Message>
-          <Channel>1</Channel>
-          <Message_ID>279</Message_ID>
-          <IsExtended>FALSE</IsExtended>
-          <IsRtr>FALSE</IsRtr>
-          <DLC>1</DLC>
-          <DataBytes>0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
-          <Key_Value>a</Key_Value>
-          <Key_Enabled>FALSE</Key_Enabled>
-        </Message>
-        <Message>
-          <Channel>1</Channel>
-          <Message_ID>280</Message_ID>
-          <IsExtended>FALSE</IsExtended>
-          <IsRtr>FALSE</IsRtr>
-          <DLC>1</DLC>
-          <DataBytes>0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
-          <Key_Value>a</Key_Value>
-          <Key_Enabled>FALSE</Key_Enabled>
-        </Message>
-        <Message>
-          <Channel>1</Channel>
-          <Message_ID>281</Message_ID>
-          <IsExtended>FALSE</IsExtended>
-          <IsRtr>FALSE</IsRtr>
-          <DLC>1</DLC>
-          <DataBytes>0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
-          <Key_Value>a</Key_Value>
-          <Key_Enabled>FALSE</Key_Enabled>
-        </Message>
-        <Message>
-          <Channel>1</Channel>
-          <Message_ID>282</Message_ID>
-          <IsExtended>FALSE</IsExtended>
-          <IsRtr>FALSE</IsRtr>
-          <DLC>1</DLC>
-          <DataBytes>0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
-          <Key_Value>a</Key_Value>
-          <Key_Enabled>FALSE</Key_Enabled>
-        </Message>
-        <Message>
-          <Channel>1</Channel>
-          <Message_ID>283</Message_ID>
-          <IsExtended>FALSE</IsExtended>
-          <IsRtr>FALSE</IsRtr>
-          <DLC>1</DLC>
-          <DataBytes>0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
-          <Key_Value>a</Key_Value>
-          <Key_Enabled>FALSE</Key_Enabled>
-        </Message>
-        <Message>
-          <Channel>1</Channel>
-          <Message_ID>284</Message_ID>
-          <IsExtended>FALSE</IsExtended>
-          <IsRtr>FALSE</IsRtr>
-          <DLC>1</DLC>
-          <DataBytes>0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
-          <Key_Value>a</Key_Value>
-          <Key_Enabled>FALSE</Key_Enabled>
-        </Message>
-        <Message>
-          <Channel>1</Channel>
-          <Message_ID>285</Message_ID>
-          <IsExtended>FALSE</IsExtended>
-          <IsRtr>FALSE</IsRtr>
-          <DLC>1</DLC>
-          <DataBytes>0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
-          <Key_Value>a</Key_Value>
-          <Key_Enabled>FALSE</Key_Enabled>
-        </Message>
-        <Message>
-          <Channel>1</Channel>
-          <Message_ID>286</Message_ID>
-          <IsExtended>FALSE</IsExtended>
-          <IsRtr>FALSE</IsRtr>
-          <DLC>1</DLC>
-          <DataBytes>0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
-          <Key_Value>a</Key_Value>
-          <Key_Enabled>FALSE</Key_Enabled>
-        </Message>
-        <Message>
-          <Channel>1</Channel>
-          <Message_ID>287</Message_ID>
-          <IsExtended>FALSE</IsExtended>
-          <IsRtr>FALSE</IsRtr>
-          <DLC>1</DLC>
-          <DataBytes>0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
-          <Key_Value>a</Key_Value>
-          <Key_Enabled>FALSE</Key_Enabled>
-        </Message>
-        <Message>
-          <Channel>1</Channel>
-          <Message_ID>267</Message_ID>
-          <IsExtended>FALSE</IsExtended>
-          <IsRtr>FALSE</IsRtr>
-          <DLC>1</DLC>
-          <DataBytes>1</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
-          <Key_Value>a</Key_Value>
-          <Key_Enabled>FALSE</Key_Enabled>
-        </Message>
-        <Message>
-          <Channel>1</Channel>
-          <Message_ID>257</Message_ID>
-          <IsExtended>FALSE</IsExtended>
-          <IsRtr>FALSE</IsRtr>
-          <DLC>4</DLC>
-          <DataBytes>32,203,0,0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
-          <Key_Value>a</Key_Value>
-          <Key_Enabled>FALSE</Key_Enabled>
-        </Message>
-        <Message>
-          <Channel>1</Channel>
-          <Message_ID>258</Message_ID>
-          <IsExtended>FALSE</IsExtended>
-          <IsRtr>FALSE</IsRtr>
-          <DLC>4</DLC>
-          <DataBytes>24,121,0,0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
-          <Key_Value>a</Key_Value>
-          <Key_Enabled>FALSE</Key_Enabled>
-        </Message>
-        <Message>
-          <Channel>1</Channel>
-          <Message_ID>266</Message_ID>
-          <IsExtended>FALSE</IsExtended>
-          <IsRtr>FALSE</IsRtr>
-          <DLC>2</DLC>
-          <DataBytes>30,0</DataBytes>
-          <Repetion>1000</Repetion>
-          <Repetition_Enabled>TRUE</Repetition_Enabled>
+          <DLC>8</DLC>
+          <DataBytes>0,0,0,0,0,0,0,0</DataBytes>
+          <Repetion>500</Repetion>
+          <Repetition_Enabled>FALSE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
           <Key_Enabled>FALSE</Key_Enabled>
         </Message>
       </Message_List>
     </CAN_Tx_Window>
     <CAN_Wave_Form_Genarator>
-      <WAVE_FORM>
-        <Message_ID>257</Message_ID>
-        <Default_Amplitude>0.000000</Default_Amplitude>
-        <SIGNALS>
-          <Name>IO_STACK_V</Name>
-          <Wave_Type>TRIANGLE</Wave_Type>
-          <Amplitude>200.000000</Amplitude>
-          <Frequency>1.000000</Frequency>
-          <Granularity>0.006283</Granularity>
-        </SIGNALS>
-      </WAVE_FORM>
       <Default_Sampling_Period>1</Default_Sampling_Period>
       <SignalDefiner_AutoCorrect>1</SignalDefiner_AutoCorrect>
     </CAN_Wave_Form_Genarator>

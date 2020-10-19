@@ -169,6 +169,11 @@ sc_canbus_map[32].address @stack_soc.vfull -> 0x16000 offset 0x9 -> 90121
 sc_canbus_map[33].address @stack_soc.vempty -> 0x16000 offset 0x8 -> 90120
 ```
 
+
+Steps required:
+Add the can registers above.
+
+
 # Installation of Hardware
 
 ## Nuvation BMS
@@ -188,3 +193,9 @@ discharge lim amps to milliamps.
 
 need to disable heartbeat at BMS
 
+value error from stack_state. Datatype is u8 not u16.
+
+DHCP is not working correctly, why?
+
+question for Brandon:
+The SMA subtracts 1 volt from the charge voltage limit. Have you already anticipated for that in the Nuvation BMS? Should I artifically add 1 volt to the charge limit?
