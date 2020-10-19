@@ -33,6 +33,9 @@ class Framer:
         except cantools.database.DecodeError as error:
             LOGGER.warning("unable to decode message 0x{:02x}".format(int(str(error))))
             return None
+        except ValueError as error:
+            LOGGER.warning("Arbitration Id: 0x{:02x} throws value error {}".format(msg.arbitration_id, str(error)))
+            return None
 
 
     def encode_to_frame(self, name: str, data: dict) -> can.Message:
