@@ -199,3 +199,12 @@ DHCP is not working correctly, why?
 
 question for Brandon:
 The SMA subtracts 1 volt from the charge voltage limit. Have you already anticipated for that in the Nuvation BMS? Should I artifically add 1 volt to the charge limit?
+
+First Startup:
+IE BMS OFF
+GATEWAY OFF
+SMA OFF
+
+Turn on Gateway, wait 10s.
+Turn on BMS, wait 10s.
+Turn on SMA, wait 60s and confirm no error messages.

@@ -115,8 +115,8 @@
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>HIDE</WindowPlacement>
         <Top>70</Top>
-        <Left>-78</Left>
-        <Right>412</Right>
+        <Left>-156</Left>
+        <Right>334</Right>
         <Bottom>300</Bottom>
       </Window_Position>
       <COLUMN_WIDTH>
@@ -131,8 +131,8 @@
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>HIDE</WindowPlacement>
         <Top>70</Top>
-        <Left>-78</Left>
-        <Right>412</Right>
+        <Left>-156</Left>
+        <Right>334</Right>
         <Bottom>300</Bottom>
       </Window_Position>
       <COLUMN_WIDTH>
@@ -147,8 +147,8 @@
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>HIDE</WindowPlacement>
         <Top>70</Top>
-        <Left>-78</Left>
-        <Right>412</Right>
+        <Left>-156</Left>
+        <Right>334</Right>
         <Bottom>300</Bottom>
       </Window_Position>
       <COLUMN_WIDTH>
@@ -302,10 +302,10 @@
       <Interpretation_Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>RESTORETOMAXIMIZED</WindowPlacement>
-        <Top>179</Top>
-        <Left>10</Left>
-        <Bottom>457</Bottom>
-        <Right>605</Right>
+        <Top>181</Top>
+        <Left>11</Left>
+        <Bottom>459</Bottom>
+        <Right>360</Right>
       </Interpretation_Window_Position>
     </CAN_Message_Window>
     <J1939_Message_Window>
@@ -546,6 +546,18 @@
           <IsRtr>FALSE</IsRtr>
           <DLC>8</DLC>
           <DataBytes>0,0,0,0,0,0,0,0</DataBytes>
+          <Repetion>500</Repetion>
+          <Repetition_Enabled>FALSE</Repetition_Enabled>
+          <Key_Value>a</Key_Value>
+          <Key_Enabled>FALSE</Key_Enabled>
+        </Message>
+        <Message>
+          <Channel>1</Channel>
+          <Message_ID>277</Message_ID>
+          <IsExtended>FALSE</IsExtended>
+          <IsRtr>FALSE</IsRtr>
+          <DLC>4</DLC>
+          <DataBytes>0,0,0,0</DataBytes>
           <Repetion>500</Repetion>
           <Repetition_Enabled>FALSE</Repetition_Enabled>
           <Key_Value>a</Key_Value>
