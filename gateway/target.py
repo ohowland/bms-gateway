@@ -18,8 +18,8 @@ class Target:
 
         self._name = config['name']
         self._framer = framer.Framer(config)
-        can_filter_mask = int(config['can_mask'])
 
+        can_filter_mask = int(config['can_mask'])
         can_filters = [{"can_id": msg.frame_id, "can_mask": can_filter_mask, "extended": False} \
                 for msg in self._framer.defined_messages()]
 
@@ -118,7 +118,6 @@ class Target:
         ''' Returns the write buffer, and clears the
             internal buffer storage
         '''
-
         write_buffer = copy.copy(self._write_buffer)
         self._write_buffer.clear() # Clear the buffer after read
         return write_buffer
