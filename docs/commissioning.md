@@ -208,3 +208,8 @@ SMA OFF
 Turn on Gateway, wait 10s.
 Turn on BMS, wait 10s.
 Turn on SMA, wait 60s and confirm no error messages.
+
+## Crontab
+There is a very slow memory leak that needs to be diagnosed. Reset the until sunday night until resolved:  
+`sudo crontab -e`  
+`0 0 * * 0 /sbin/shutdown -r now`
