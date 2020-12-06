@@ -22,6 +22,9 @@ def timer():
 
     return internal_timer
 
+def start():
+    tracemalloc.start()
+
 async def snapshot_loop():
 
     stats_logger = logging.getLogger()
