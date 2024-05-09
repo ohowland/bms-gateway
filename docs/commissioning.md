@@ -197,8 +197,7 @@ value error from stack_state. Datatype is u8 not u16.
 
 DHCP is not working correctly, why?
 
-question for Brandon:
-The SMA subtracts 1 volt from the charge voltage limit. Have you already anticipated for that in the Nuvation BMS? Should I artifically add 1 volt to the charge limit?
+The SMA subtracts 1 volt from the charge voltage limit.
 
 First Startup:
 IE BMS OFF
