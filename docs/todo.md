@@ -1,9 +1,9 @@
 # Documentation
 - [x] PeakCAN driver installation and testing
 - [x] CAN interface auto-up
-- [ ] Testing agenda for IE Facility:
+- [x] Testing agenda for IE Facility:
   1. [x] Document process for checking CAN signal integrity
-  2. [ ] Process for checking CAN messaging integrity (scale, addr, size)
+  2. [x] Process for checking CAN messaging integrity (scale, addr, size)
 - [x] Document connector build
 - [x] Finalize parts list
 
@@ -12,7 +12,8 @@
 - [x] Instrument software to log all the errors in debug mode
 - [ ] Command line interface dump object data.  
 Referred to as a REPL, use the subprocess module and pipes, see SO post here:
-https://stackoverflow.com/questions/19880190/interactive-input-output-using-python [ ] Define method for writing static values to SMA
+https://stackoverflow.com/questions/19880190/interactive-input-output-using-python
+- [x] Define method for writing static values to SMA
 - [x] Finish DBC for nuvation
 - [x] Define method for translating nuvation alarms (bool) to SMA alarm (two bit)
 - [x] Initialize writer before allowing publish to canbus
